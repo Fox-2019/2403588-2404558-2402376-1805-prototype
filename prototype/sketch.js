@@ -7,16 +7,16 @@ let tilemap = []; // outer array is Y inner arrays are Xs; tilemap[y][x]
 
 let textures = [];
 let textureMap = [
-  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
-  [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
-  [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  // [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // [1, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 0, 0, 0, 1, 0, 0, 0, 0],
+  // [0, 0, 1, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  // [0, 0, 0, 0, 0, 0, 0, 1, 0, 0],
+  // [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
 ];
 
 //PLAYER
@@ -38,8 +38,24 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(600, 600);
+  createCanvas(500, 500);
   // imageMode(CENTER);
+
+  //generate textureMap
+  for(let y=0; y<mapSize; y++) {
+    textureMap[y] = [];
+
+    for(let x=0; x<mapSize; x++) {
+      //whether tile is walkable or not is choosen randomly, 1 in 10 is a stone
+      let tileGen = floor(random(1,11));
+      if(tileGen > 1) tileGen = 0;
+
+      textureMap[y][x] = tileGen;
+    }
+  }
+
+
+
   let id = 0;
 
   // X loop
