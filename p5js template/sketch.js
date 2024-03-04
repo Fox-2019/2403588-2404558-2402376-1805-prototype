@@ -12,7 +12,7 @@ function draw(){
   fill(0,100,0);
   line( 0 ,mouseY, 1000, mouseY); 
 
-  rect(100, 200, 100, 100);
+  rect(110, 200, 100, 100);
 }
 
 function mousePressed() {
