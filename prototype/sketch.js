@@ -151,7 +151,7 @@ class Tile {
 class Player {
   constructor(sprites, startAcross, startDown, size, speed, tileRules) {
     this.sprites = sprites;
-    this.currentSprite = this.sprites.right;
+    // this.currentSprite = this.sprites.right;
     this.across = startAcross;
     this.down = startDown;
     this.x = this.across * size;
@@ -171,25 +171,25 @@ class Player {
       if (key === "w") {
         this.dirX = 0;
         this.dirY = -1;
-        this.currentSprite = this.sprites.up;
+        // this.currentSprite = this.sprites.up;
       }
 
       if (key === "s") {
         this.dirX = 0;
         this.dirY = 1;
-        this.currentSprite = this.sprites.down;
+        // this.currentSprite = this.sprites.down;
       }
 
       if (key === "a") {
         this.dirX = -1;
         this.dirY = 0;
-        this.currentSprite = this.sprites.left;
+        // this.currentSprite = this.sprites.left;
       }
 
       if (key === "d") {
         this.dirX = 1;
         this.dirY = 0;
-        this.currentSprite = this.sprites.right;
+        // this.currentSprite = this.sprites.right;
       }
 
       this.checkTargetTile();
@@ -234,7 +234,7 @@ class Player {
   }
 
   display() {
-    image(this.currentSprite, this.x, this.y, this.tileSize, this.tileSize);
+    image(this.sprites, this.x, this.y, this.tileSize, this.tileSize);
   }
 
   debug() {
