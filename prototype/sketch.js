@@ -21,20 +21,23 @@ let textureMap = [
 
 //PLAYER
 let player;
-let playerSprite = {};
+// let playerSprite = {};
+let playerSprite;
 let playerSpeed = 5;
 let playerSize = tileSize;
 
 function preload() {
-  textures[0] = loadImage("imgs/grassy.png");
-  textures[1] = loadImage("imgs/stone.png");
+  textures[0] = loadImage("leafy.png");
+  textures[1] = loadImage("crystal.png");
 
-  playerSprite = {
-    up: loadImage("imgs/librarian-u.png"),
-    down: loadImage("imgs/librarian-d.png"),
-    left: loadImage("imgs/librarian-l.png"),
-    right: loadImage("imgs/librarian-r.png"),
-  };
+  playerSprite = loadImage("fairy.png")
+  //for when we have original textures for the character
+  // playerSprite = {
+  //   up: loadImage("imgs/librarian-u.png"),
+  //   down: loadImage("imgs/librarian-d.png"),
+  //   left: loadImage("imgs/librarian-l.png"),
+  //   right: loadImage("imgs/librarian-r.png"),
+  // };
 }
 
 function setup() {
