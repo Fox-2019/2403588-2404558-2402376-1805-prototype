@@ -1,6 +1,6 @@
 //TILEMAPS
 let tileSize = 50;
-let mapSize = 10; // n x n size of the tilemap
+let mapSize = 30; // n x n size of the tilemap
 let tilemap = []; // outer array is Y inner arrays are Xs; tilemap[y][x]
 // let initX = 50; // initial X coordinate
 // let initY = 50; // initial Y coordinate
@@ -30,7 +30,7 @@ function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
 
-  playerSprite = loadImage("fairy.png")
+  playerSprite = loadImage("fairy.png");
   //for when we have original textures for the character
   // playerSprite = {
   //   up: loadImage("imgs/librarian-u.png"),
@@ -41,23 +41,10 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(500, 500);
+  createCanvas(600, 600);
   // imageMode(CENTER);
 
-  //generate textureMap
-  for(let y=0; y<mapSize; y++) {
-    textureMap[y] = [];
-
-    for(let x=0; x<mapSize; x++) {
-      //whether tile is walkable or not is choosen randomly, 1 in 10 is a stone
-      let tileGen = floor(random(1,11));
-      if(tileGen > 1) tileGen = 0;
-
-      textureMap[y][x] = tileGen;
-    }
-  }
-
-
+  GenerateTextureMap();
 
   let id = 0;
 
@@ -93,17 +80,61 @@ function draw() {
   background(50);
   // tile1.display();
   // tile1.debug();
+  MoveCam();
+  DisplayGraphics();
+} //END OF DRAW
+
+function DisplayGraphics() {
   for (let across = 0; across < mapSize; across++) {
     for (let down = 0; down < mapSize; down++) {
       tilemap[across][down].display();
-      // tilemap[across][down].debug();
+      tilemap[across][down].debug();
     }
   }
 
   player.display();
   player.move();
   player.debug();
-} //END OF DRAW
+}
+
+function MoveCam() {
+  let xTranslate = 0;
+  let yTranslate = 0;
+
+  if (key === "ArrowUp") {
+    yTranslate += 50;
+    translate(xTranslate, yTranslate);
+  }
+
+  if (key === "ArrowDown") {
+    yTranslate -= 50;
+    translate(xTranslate, yTranslate);
+  }
+
+  if (key === "ArrowLeft") {
+    xTranslate += 50;
+    translate(xTranslate, yTranslate);
+  }
+
+  if (key === "ArrowRight") {
+    xTranslate -= 50;
+    translate(xTranslate, yTranslate);
+  }
+}
+
+function GenerateTextureMap() {
+  for (let y = 0; y < mapSize; y++) {
+    textureMap[y] = [];
+
+    for (let x = 0; x < mapSize; x++) {
+      //whether tile is walkable or not is choosen randomly, 1 in 10 chance it'll be a stone
+      let tileGen = floor(random(1, 11));
+      if (tileGen > 1) tileGen = 0;
+
+      textureMap[y][x] = tileGen;
+    }
+  }
+}
 
 function keyPressed() {
   player.setDirection();
@@ -127,31 +158,28 @@ class Tile {
   }
 
   debug() {
-    //TILE
+    //red outline
     stroke(150, 0, 0);
     fill(55, 55, 55, 150);
     rect(this.x, this.y, this.tileSize, this.tileSize);
 
-    //this takes the 'id' of the object and if its a single digit: manually adds a 0 to the front
     let tempID;
-    if (this.tileID < 10) {
-      tempID = "0" + this.tileID;
-    } else {
-      tempID = this.tileID;
-    }
+    tempID = this.across + ";" + this.down;
 
-    //LABEL
+    //tile xy position text
     noStroke();
     fill(245);
     textAlign(LEFT, TOP);
     text(tempID, this.x + 2, this.y + 2);
+    // text(this.across, this.x + 10, this.y + 2);
+    // text(this.down, this.x + this.tileSize - 20, this.y + 2);
   }
 } //END OF TILE
 
 class Player {
   constructor(sprites, startAcross, startDown, size, speed, tileRules) {
     this.sprites = sprites;
-    this.currentSprite = this.sprites.right;
+    // this.currentSprite = this.sprites.right;
     this.across = startAcross;
     this.down = startDown;
     this.x = this.across * size;
@@ -171,25 +199,25 @@ class Player {
       if (key === "w") {
         this.dirX = 0;
         this.dirY = -1;
-        this.currentSprite = this.sprites.up;
+        // this.currentSprite = this.sprites.up;
       }
 
       if (key === "s") {
         this.dirX = 0;
         this.dirY = 1;
-        this.currentSprite = this.sprites.down;
+        // this.currentSprite = this.sprites.down;
       }
 
       if (key === "a") {
         this.dirX = -1;
         this.dirY = 0;
-        this.currentSprite = this.sprites.left;
+        // this.currentSprite = this.sprites.left;
       }
 
       if (key === "d") {
         this.dirX = 1;
         this.dirY = 0;
-        this.currentSprite = this.sprites.right;
+        // this.currentSprite = this.sprites.right;
       }
 
       this.checkTargetTile();
@@ -234,20 +262,12 @@ class Player {
   }
 
   display() {
-    image(this.currentSprite, this.x, this.y, this.tileSize, this.tileSize);
+    image(this.sprites, this.x, this.y, this.tileSize, this.tileSize);
   }
 
   debug() {
-    //TILE
     stroke(245);
     noFill();
-    rect(this.xPos, this.yPos, this.tileSize, this.tileSize);
-
-    //LABEL
-    noStroke();
-    fill(255);
-    textAlign(LEFT, TOP);
-
-    text(this.tileID, this.xPos, this.yPos);
+    rect(this.x, this.y, this.tileSize, this.tileSize);
   }
 }
