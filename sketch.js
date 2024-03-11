@@ -14,7 +14,7 @@ let playerSize = tileSize;
 
 let camera;
 
-let debugFLIP = true; //true turns on all debug functions
+let debugFLIP = false; //true turns on all debug functions
 
 function preload() {
   textures[0] = loadImage("leafy.png");
