@@ -123,7 +123,7 @@ function GenerateTileMap() {
     }
   }
 }
-
+//Not complete version need to link enemy code to the point system
 //Function to increase points
 
 function increasePoints(amount){
