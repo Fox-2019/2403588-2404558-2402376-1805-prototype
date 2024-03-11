@@ -16,6 +16,10 @@ let camera;
 
 let debugFLIP = false; //true turns on all debug functions
 
+//Point system variables
+
+let points = 0
+
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
@@ -58,7 +62,16 @@ function draw() {
   DisplayGraphics();
   player.move();
   camera.move();
+
+textAlign(RIGHT);
+textSize(20);
+fill(255);
+text("points:"+points,width-50,30);
+
+
 } //END OF DRAW
+
+
 
 function DisplayGraphics() {
   translate(
@@ -109,6 +122,12 @@ function GenerateTileMap() {
       id++;
     }
   }
+}
+//Not complete version need to link enemy code to the point system
+//Function to increase points
+
+function increasePoints(amount){
+  points+=amount;
 }
 
 function keyPressed() {
