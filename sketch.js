@@ -65,8 +65,8 @@ function draw() {
 
 textAlign(RIGHT);
 textSize(20);
-Fill(255);
-text("points:"+points,width/2,height/2);
+fill(255);
+text("points:"+points,width-50,30);
 
 
 } //END OF DRAW
