@@ -17,7 +17,6 @@ let camera;
 let debugFLIP = false; //true turns on all debug functions
 
 //Point system variables
-
 let points = 0
 
 function preload() {
@@ -72,7 +71,7 @@ text("points:"+points,width-50,30);
 } //END OF DRAW
 
 
-
+//AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles 
 function DisplayGraphics() {
   translate(
     camera.Xtranslate + camera.Xoffset,
@@ -123,9 +122,9 @@ function GenerateTileMap() {
     }
   }
 }
+
 //Not complete version need to link enemy code to the point system
 //Function to increase points
-
 function increasePoints(amount){
   points+=amount;
 }
