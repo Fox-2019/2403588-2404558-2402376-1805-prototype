@@ -5,7 +5,7 @@ Runaway Raceway
 # By (The Coders)
 
 Members:
-Adam - 2403588
+Adam Bartnik - 2403588
 jess - 2404558
 Jasveen - 2402376
 
@@ -17,7 +17,7 @@ Our Game is inspired by pacman and other similar simple survival games. The goal
 
 Jess - created all the assets and mood boards as well as making the enemy class and getting it to chase and interact with the player. Created and wrote the README file.
 
-Adam - Created the Tilemap mechanics as well as the chunk system. Working heavily on the camera angels and implementing translate to get the player to move in the most effective way.
+Adam - Created the Tilemap mechanics as well as the chunk system. Working heavily on the camera and implementing translate to make the player always visible.
 
 Jasveen - Implemented the points system and how the power ups interact with the player class and how many points each powerup should give the player.
 
