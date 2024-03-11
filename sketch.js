@@ -14,7 +14,11 @@ let playerSize = tileSize;
 
 let camera;
 
-let debugFLIP = true; //true turns on all debug functions
+let debugFLIP = false; //true turns on all debug functions
+
+//Point system variables
+
+let points = 0
 
 function preload() {
   textures[0] = loadImage("leafy.png");
@@ -58,7 +62,16 @@ function draw() {
   DisplayGraphics();
   player.move();
   camera.move();
+
+textAlign(RIGHT);
+textSize(20);
+Fill(255);
+text("points:"+points,width/2,height/2);
+
+
 } //END OF DRAW
+
+
 
 function DisplayGraphics() {
   translate(
@@ -109,6 +122,12 @@ function GenerateTileMap() {
       id++;
     }
   }
+}
+
+//Function to increase points
+
+function increasePoints(amount){
+  points+=amount;
 }
 
 function keyPressed() {
