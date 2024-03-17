@@ -134,3 +134,83 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
+
+class Player {
+  constructor(sprite, x, y, size, speed, textureMap) {
+    this.sprite = sprite;
+    this.x = x * size;
+    this.y = y * size;
+    this.size = size;
+    this.speed = speed;
+    this.textureMap = textureMap;
+  }
+
+  display() {
+    image(this.sprite, this.x, this.y, this.size, this.size);
+  }
+
+  debug(show) {
+    if (show) {
+      noFill();
+      stroke(255, 0, 0);
+      rect(this.x, this.y, this.size, this.size);
+    }
+  }
+
+  move() {
+    // Calculate new position based on direction and speed
+    let newX = this.x + this.speed * (keyIsDown(RIGHT_ARROW) - keyIsDown(LEFT_ARROW));
+    let newY = this.y + this.speed * (keyIsDown(DOWN_ARROW) - keyIsDown(UP_ARROW));
+
+    // Check for collision with crystals
+    let playerBounds = {
+      left: newX,
+      right: newX + this.size,
+      top: newY,
+      bottom: newY + this.size
+    };
+
+    for (let down = 0; down < mapSize; down++) {
+      for (let across = 0; across < mapSize; across++) {
+        let tile = this.textureMap[down][across];
+        if (tile.type === 1) { // Assuming type 1 represents crystals
+          let tileBounds = {
+            left: across * tileSize,
+            right: (across + 1) * tileSize,
+            top: down * tileSize,
+            bottom: (down + 1) * tileSize
+          };
+
+          // Check for collision
+          if (
+            playerBounds.right > tileBounds.left &&
+            playerBounds.left < tileBounds.right &&
+            playerBounds.bottom > tileBounds.top &&
+            playerBounds.top < tileBounds.bottom
+          ) {
+            // Collision detected, increase points, remove crystal, and respawn crystal
+            increasePoints(1);
+            this.textureMap[down][across] = new Tile(0, across, down, tileSize, 0); // Remove the crystal from the tilemap
+            respawnCrystal();
+          }
+        }
+      }
+    }
+
+    // Move the player only if no collision with walls occurred
+    if (newX >= 0 && newX < width - this.size && newY >= 0 && newY < height - this.size) {
+      this.x = newX;
+      this.y = newY;
+    }
+  }
+
+  respawnCrystal() {
+    let x, y;
+    do {
+      x = floor(random(mapSize));
+      y = floor(random(mapSize));
+    } while (this.textureMap[y][x].type !== 0); // Keep selecting random position until an empty tile is found
+
+    this.textureMap[y][x] = new Tile(1, x, y, tileSize, 0); // Respawn the crystal at the new position
+  }
+}
