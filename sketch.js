@@ -133,3 +133,33 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
+
+
+function generateCollectibles(num) {
+  for (let i = 0; i < num; i++) {
+    let x = random(width);
+    let y = random(height);
+    collectibles.push(new Collectible(x, y));
+  }
+}
+
+//Collectibles
+
+class Collectible {
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = 1;
+  }
+
+  display() {
+    if (!this.collected) {
+      image(collectibleSprite, this.x, this.y, this.size, this.size);
+    }
+  }
+
+  pickup() {
+    this.collected = true;
+    // Increase score or perform other actions
+  }
+}

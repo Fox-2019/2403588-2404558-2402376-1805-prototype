@@ -14,6 +14,13 @@ class Player {
     this.isMoving = false;
     this.tX = this.x;
     this.tY = this.y;
+
+    //Player Interactipn with collectible.
+intersects(collectible) {
+  let d = dist(this.x, this.y, collectible.x, collectible.y);
+  return d < this.size / 2 + collectible.size / 2;
+}
+  }
   }
 
   setDirection() {
@@ -96,3 +103,4 @@ class Player {
     }
   }
 }
+
