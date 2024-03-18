@@ -7,8 +7,8 @@ let textureMap = []; // same as tilemap but this determines which tile graphic i
 
 //PLAYER
 let player;
-// let playerSprite = {};
-let playerSprite;
+let playerSprite = {};
+// let playerSprite;
 let playerSpeed = 10;
 let playerSize = tileSize;
 
@@ -17,28 +17,27 @@ let camera;
 let debugFLIP = false; //true turns on all debug functions
 
 
-//ishma & jasveen
+//ishma & jasveen with adams help
 //Collectibles system variables
 let points = 0
 let pickUpsArr = []; //array of collectibles
-let collectNum = 5; //number of collectibles at any time
+let collectNum = 7; //number of collectibles at any time
 let collectibeSprite;
 
 
 function preload() {
-  textures[0] = loadImage("leafy.png");
-  textures[1] = loadImage("crystal.png");
-
-  playerSprite = loadImage("fairy.png");
-  collectibleSprite = loadImage("coin.jpg");
+  textures[0] = loadImage("JESS ASSETS/leafy.png");
+  textures[1] = loadImage("JESS ASSETS/crystal.png");
 
   //for when we have original textures for the character
-  // playerSprite = {
-  //   up: loadImage("imgs/librarian-u.png"),
-  //   down: loadImage("imgs/librarian-d.png"),
-  //   left: loadImage("imgs/librarian-l.png"),
-  //   right: loadImage("imgs/librarian-r.png"),
-  // };
+  playerSprite = {
+    left: loadImage("JESS ASSETS/fairy side view.png"),
+    right: loadImage("JESS ASSETS/fairy.png"),
+  };
+
+    // playerSprite = loadImage("JESS ASSETS/fairy.png");
+    collectibleSprite = loadImage("JESS ASSETS/emerald.png");
+
 }
 
 function setup() {
@@ -95,8 +94,9 @@ function DisplayGraphics() {
     }
   }
 
-  for (let i=0; i<=collectNum; i++) {
-    // pickUpsArr[i].display();
+  for (let i=0; i<collectNum; i++) {
+    let temp;
+    temp = pickUpsArr[i].display();
     // pickUpsArr[i].intersects();
   }
 
@@ -185,7 +185,7 @@ class Collectible {
   }
 
   display() {
-    if (this.collected) {
+    if (!this.collected) {
       image(collectibleSprite, this.x, this.y, this.size, this.size);
     }
   }
