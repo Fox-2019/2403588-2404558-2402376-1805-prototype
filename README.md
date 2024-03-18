@@ -6,7 +6,7 @@ Fairy Frenzy
 
 Members:
 Adam Bartnik - 2403588
-Jess - 2404558
+Jessica Fox - 2404558
 Jasveen - 2402376
 Ish - 2410313
 
