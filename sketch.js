@@ -128,8 +128,12 @@ function keyPressed() {
 }
 
 function spawnEmerald() {
-  let x = floor(random(0, mapSize));
-  let y = floor(random(0, mapSize));
+  let x, y;
+  do {
+    x = floor(random(0, mapSize));
+    y = floor(random(0, mapSize));
+  } while (textureMap[y][x] === 1); // Check if the position overlaps with a crystal tile
+
   emeralds.push(new Emerald(emeraldImage, x, y, tileSize));
 }
 
@@ -139,4 +143,5 @@ function respawnEmeralds() {
     spawnEmerald();
   }
 }
+
 
