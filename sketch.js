@@ -22,8 +22,8 @@ class Emerald {
   }
 }
 
-// Declare Emerald object and load its image
-let emerald;
+// Declare Emerald objects array and load its image
+let emeralds = [];
 let emeraldImage;
 
 //TILEMAPS
@@ -59,7 +59,14 @@ function setup() {
   GenerateTileMap();
   camera = new Camera();
   player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
-  emerald = new Emerald(emeraldImage, floor(random(0, mapSize)), floor(random(0, mapSize)), tileSize); // Initialize Emerald object
+
+  // Initialize Emerald objects array with random positions
+  for (let i = 0; i < 10; i++) {
+    emeralds.push(new Emerald(emeraldImage, floor(random(0, mapSize)), floor(random(0, mapSize)), tileSize));
+  }
+
+  // Set respawn timer for emeralds
+  setInterval(respawnEmeralds, 5000); // Adjust the respawn time (in milliseconds) as needed
 }
 
 function draw() {
@@ -71,8 +78,12 @@ function draw() {
   textSize(20);
   fill(255);
   text("points:" + points, width - 50, 30);
-  emerald.display();
-  emerald.checkCollision(player);
+
+  // Display and check collision for each emerald
+  for (let i = 0; i < emeralds.length; i++) {
+    emeralds[i].display();
+    emeralds[i].checkCollision(player);
+  }
 }
 
 function DisplayGraphics() {
@@ -113,9 +124,17 @@ function increasePoints(amount) {
   points += amount;
 }
 
+function respawnEmeralds() {
+  for (let i = 0; i < emeralds.length; i++) {
+    if (emeralds[i].isCollected) {
+      emeralds[i].x = floor(random(0, mapSize));
+      emeralds[i].y = floor(random(0, mapSize));
+      emeralds[i].isCollected = false;
+    }
+  }
+}
+
 function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
-
-
