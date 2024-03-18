@@ -15,6 +15,13 @@ class Player {
     this.tX = this.x;
     this.tY = this.y;
   }
+
+    update() {
+      this.x = mouseX;
+      this.y = mouseY;
+    }  
+
+    
     //Player Interactipn with collectible.
     intersects(collectible) {
         let d = dist(this.x, this.y, collectible.x, collectible.y);

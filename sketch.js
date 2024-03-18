@@ -22,7 +22,7 @@ let points = 0
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
-  collectibeSprite = loadImage("coin.jpg");
+  collectibLeSprite = loadImage("coin.jpg");
   playerSprite = loadImage("fairy.png");
   //for when we have original textures for the character
   // playerSprite = {
@@ -53,6 +53,7 @@ function setup() {
     playerSpeed,
     textureMap
   );
+  
 } // END OF SETUP
 
 function draw() {
@@ -92,6 +93,7 @@ function DisplayGraphics() {
     }
   }
 
+  player.update();
   player.display();
   player.debug(debugFLIP);
 }
@@ -152,7 +154,7 @@ function generateCollectibles(num) {
 
 //Collectibles
 
-class Collectible {
+class Collectible { 
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -160,7 +162,7 @@ class Collectible {
   }
 
   display() {
-    if (!this.collected) {
+    if (this.collected) {
       image(collectibleSprite, this.x, this.y, this.size, this.size);
     }
   }
