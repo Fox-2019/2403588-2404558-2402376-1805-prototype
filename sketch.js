@@ -1,5 +1,5 @@
 //TILEMAPS
-let tileSize = 50; //pixel size of tiles
+let tileSize = 20; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
 let tilemap = []; // contains each tile Object: outer array is Y inner arrays are Xs; tilemap[y][x]
 let textures = [];
@@ -16,14 +16,21 @@ let camera;
 
 let debugFLIP = false; //true turns on all debug functions
 
-//Point system variables
+
+//ishma & jasveen
+//Collectibles system variables
 let points = 0
+let pickUpsArr = []; //array of collectibles
+let collectNum = 5; //number of collectibles at any time
+let collectibeSprite;
+
 
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
-
   playerSprite = loadImage("fairy.png");
+  collectibleSprite = loadImage("coin.jpg");
+
   //for when we have original textures for the character
   // playerSprite = {
   //   up: loadImage("imgs/librarian-u.png"),
@@ -44,6 +51,9 @@ function setup() {
   GenerateTileMap();
   // console.log(tilemap);
 
+  //ISHMA create collectibles
+  generateCollectibles(collectNum);
+
   camera = new Camera();
   player = new Player(
     playerSprite,
@@ -53,6 +63,7 @@ function setup() {
     playerSpeed,
     textureMap
   );
+  
 } // END OF SETUP
 
 function draw() {
@@ -66,7 +77,6 @@ textAlign(RIGHT);
 textSize(20);
 fill(255);
 text("points:"+points,width-50,30);
-
 
 } //END OF DRAW
 
@@ -85,6 +95,13 @@ function DisplayGraphics() {
     }
   }
 
+  for (let i=0; i<=collectNum; i++) {
+    pickUpsArr[i].display();
+    // pickUpsArr[i].intersects();
+  }
+  
+
+  player.update();
   player.display();
   player.debug(debugFLIP);
 }
@@ -133,3 +150,47 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
+
+
+function generateCollectibles(num) {
+  for (let i = 0; i < num; i++) {
+    let across = random(mapSize);
+    let down = random(mapSize);
+    let x = across * tileSize;
+    let y = down * tileSize;
+    pickUpsArr.push(new Collectible(x, y));
+  }
+}
+
+//Collectibles
+<<<<<<< HEAD
+
+class Collectible { 
+=======
+class Collectible {
+>>>>>>> 531fdd6e9a4a21ab3d39f18f76df0b7ee98d17bc
+  constructor(x, y) {
+    this.x = x;
+    this.y = y;
+    this.size = tileSize;
+    this.collected = false;
+  }
+
+  //Player Interactipn with collectible.
+  intersects() {
+    let d = dist(player.x, player.y, this.x,this.y);
+
+    return d < player.size / 2 + this.size / 2;
+  }
+
+  display() {
+    if (this.collected) {
+      image(collectibleSprite, this.x, this.y, this.size, this.size);
+    }
+  }
+
+  pickup() {
+    this.collected = true;
+  }
+}
+
