@@ -31,6 +31,7 @@ The main theme of our game is fantasy, a fantasy world rooted in a providing a s
 # Game Design
 
 Our game was designed after older arcade style games that requre the player to gain the highest score they can while being chased by enemies, we designed the game to work in a similar way to pacman being able to gain points while avoiding ghosts. However we aslo wanted the game to be fun and not extremely stressful we think its very important to find the balace between the feeling that push to keep moving and gain more points while also being in a fun colourful environment that is pleasing and cohesive to the eye that possibly adds that nostalgic comforting feeling that games like legend of zelda or pac man tent to give. The points system was constructed to be unique possibly giving the player a differing amount of points based on the powerup they choose.Our game combines both camera angles, points sytems and active enemies with fun designs and an intresting narrative to provide our player with a feeling of nostalgia and intrigue, hoping to give a fun experience by specifically modifying our code to meet those needs. 
+Having the main player confined to the tiles once again ushers in that urgency to gain more points and move faster much like pacman the enemies seem to move faster. with the enemies not restricted like the player is it encourages that feeling of urgency all the more.
 
 
 
@@ -56,6 +57,9 @@ I chose specific items to create for powerups such as emeralds relating back to 
 
 # Concept Art
 ![concept](concept.png)
+
+Experimental sketch art deicting the colours and flow we decided that the game should have.
+The enviroment is dark and overgrown allowing for that theme of adventure to be realised while at contrast with the light baby blue of our main player who lights the way tying nicely into the fantasy genre that we where hoping to achive, the dragons stalking closer to push the player to gain as many points as they can therefore creating an effective game cycle  with the inclusion of the differeing mechanics within the code.
 # Author
 
 Jessica Fox
