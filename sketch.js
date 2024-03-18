@@ -62,7 +62,7 @@ function setup() {
   player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
 
   // Initialize Emerald objects array with random positions
-  for (let i = 0; i < 2; i++) { // Initially spawn 2 emeralds
+  for (let i = 0; i < 4; i++) { // Initially spawn 4 emeralds
     spawnEmerald();
   }
 }
@@ -139,9 +139,10 @@ function spawnEmerald() {
 
 function respawnEmeralds() {
   emeralds = []; // Clear existing emeralds
-  for (let i = 0; i < 2; i++) { // Respawn 2 emeralds
+  for (let i = 0; i < 4; i++) { // Respawn 4 emeralds
     spawnEmerald();
   }
 }
+
 
 
