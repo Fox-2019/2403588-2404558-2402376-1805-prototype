@@ -9,7 +9,7 @@ class Camera {
     this.DirY = 0;
     this.TargetX = 0;  //the target offset for the camera to achieve
     this.TargetY = 0;
-    this.camSpeed = 20;
+    this.camSpeed = 25;
   }
   //use a function parameter to set the direction of the camera, passed in from moveIfOffscreen()
   SetCamDir(direction) {
