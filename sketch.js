@@ -9,7 +9,7 @@ let textureMap = []; // same as tilemap but this determines which tile graphic i
 let player;
 // let playerSprite = {};
 let playerSprite;
-let playerSpeed = 5;
+let playerSpeed = 10;
 let playerSize = tileSize;
 
 let camera;
@@ -53,6 +53,7 @@ function setup() {
   // console.log(tilemap);
   //ISHMA create collectibles
   generateCollectibles(collectNum);
+  console.log(pickUpsArr);
 
 
   camera = new Camera();
@@ -74,21 +75,18 @@ function draw() {
   player.move();
   camera.move();
 
-textAlign(RIGHT);
-textSize(20);
-fill(255);
-text("points:"+points,width-50,30);
 
 
 } //END OF DRAW
 
-
 //AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles 
 function DisplayGraphics() {
+
   translate(
     camera.Xtranslate + camera.Xoffset,
     camera.Ytranslate + camera.Yoffset
   );
+
 
   for (let across = 0; across < mapSize; across++) {
     for (let down = 0; down < mapSize; down++) {
@@ -96,13 +94,25 @@ function DisplayGraphics() {
       tilemap[across][down].debug(debugFLIP);
     }
   }
+
   for (let i=0; i<=collectNum; i++) {
-    pickUpsArr[i].display();
+    // pickUpsArr[i].display();
     // pickUpsArr[i].intersects();
   }
 
   player.display();
   player.debug(debugFLIP);
+  displayPointsText();
+
+}
+
+function displayPointsText() {
+  textAlign(RIGHT);
+  textSize(20);
+  stroke(0);
+  strokeWeight(10);
+  fill(255);
+  text("points:" + points, width-camera.Xtranslate+camera.Xoffset-80, -camera.Ytranslate+camera.Yoffset);
 }
 
 function GenerateTextureMap() {
@@ -151,8 +161,8 @@ function keyPressed() {
 }
 function generateCollectibles(num) {
   for (let i = 0; i < num; i++) {
-    let across = random(mapSize);
-    let down = random(mapSize);
+    let across = floor(random(mapSize));
+    let down = floor(random(mapSize));
     let x = across * tileSize;
     let y = down * tileSize;
     pickUpsArr.push(new Collectible(x, y));
