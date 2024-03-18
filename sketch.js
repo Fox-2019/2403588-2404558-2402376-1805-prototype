@@ -74,7 +74,12 @@ function setup() {
     }
 
     // Initialize the dragon
-    dragon = new Dragon(dragonImage, floor(random(0, 10)), floor(random(0, 10)), playerSize, dragonSpeed, textureMap);
+    let dragonX, dragonY;
+    do {
+      dragonX = floor(random(0, mapSize));
+      dragonY = floor(random(0, mapSize));
+    } while (textureMap[dragonY][dragonX] === 1); // Ensure dragon doesn't spawn on crystal tile
+    dragon = new Dragon(dragonImage, dragonX, dragonY, playerSize, dragonSpeed, textureMap);
   } catch (error) {
     console.error(error);
     textSize(24);
@@ -100,11 +105,6 @@ function draw() {
     emeralds[i].display();
     emeralds[i].checkCollision(player);
   }
-
-  // Check collision between player and dragon
-  if (dist(player.x, player.y, dragon.x, dragon.y) < tileSize / 2) {
-    gameOver();
-  }
 }
 
 function DisplayGraphics() {
@@ -117,6 +117,7 @@ function DisplayGraphics() {
   }
   player.display();
   player.debug(debugFLIP);
+  dragon.display(); // Display the dragon
 }
 
 function GenerateTextureMap() {
@@ -160,13 +161,6 @@ function spawnEmerald() {
   emeralds.push(new Emerald(emeraldImage, x, y, tileSize));
 }
 
-function respawnEmeralds() {
-  emeralds = []; // Clear existing emeralds
-  for (let i = 0; i < 4; i++) { // Respawn 4 emeralds
-    spawnEmerald();
-  }
-}
-
 // Dragon class
 class Dragon {
   constructor(image, x, y, size, speed, textureMap) {
@@ -192,14 +186,5 @@ class Dragon {
     image(this.image, this.x, this.y, this.size, this.size);
   }
 }
-
-function gameOver() {
-  textSize(32);
-  textAlign(CENTER);
-  fill(255, 0, 0);
-  text("Game Over", width / 2, height / 2);
-  noLoop(); // Stop the game loop
-}
-
 
 
