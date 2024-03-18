@@ -22,7 +22,7 @@ let points = 0
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
-
+  collectibeSprite = loadImage("coin.jpg");
   playerSprite = loadImage("fairy.png");
   //for when we have original textures for the character
   // playerSprite = {
@@ -66,6 +66,13 @@ textAlign(RIGHT);
 textSize(20);
 fill(255);
 text("points:"+points,width-50,30);
+
+for (let collectible of collectibles) {
+  collectible.display();
+  if (player.intersects(collectible)) {
+    collectible.pickup(); // Remove collectible if player intersects with it
+  }
+}
 
 
 } //END OF DRAW
@@ -159,7 +166,8 @@ class Collectible {
   }
 
   pickup() {
-    this.collected = true;
+    this.collected = true; 
     // Increase score or perform other actions
   }
 }
+
