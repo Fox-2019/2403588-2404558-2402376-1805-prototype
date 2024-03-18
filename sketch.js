@@ -50,31 +50,31 @@ function setup() {
   angleMode(DEGREES);
   frameRate(fps);
 
-    GenerateTextureMap();
-    GenerateTileMap();
-    // console.log(tilemap);
+  GenerateTextureMap();
+  GenerateTileMap();
+  // console.log(tilemap);
 
-    camera = new Camera();
-    player = new Player(
-      playerSprite,
-      floor(random(0, 10)),
-      floor(random(0, 10)),
-      playerSize,
-      playerSpeed,
-      textureMap
-    );
+  camera = new Camera();
+  player = new Player(
+    playerSprite,
+    floor(random(0, 10)),
+    floor(random(0, 10)),
+    playerSize,
+    playerSpeed,
+    textureMap
+  );
 
   //initial generation of each type of collectibles using a parameter
-    for (let i = 0; i < emeraldsNum; i++) {
-      spawnCollectible("E");
-    }
-    for (let i = 0; i < potionsNum; i++) {
-      spawnCollectible("P");
-    }
-    for (let i = 0; i < starsNum; i++) {
-      spawnCollectible("S");
-    }
-    // console.log(collectibles);
+  for (let i = 0; i < emeraldsNum; i++) {
+    spawnCollectible("E");
+  }
+  for (let i = 0; i < potionsNum; i++) {
+    spawnCollectible("P");
+  }
+  for (let i = 0; i < starsNum; i++) {
+    spawnCollectible("S");
+  }
+  // console.log(collectibles);
 
   //JASVEEN; code to create the dragon
   try {
@@ -145,6 +145,7 @@ function DisplayGraphics() {
   dragon.display();
   dragon.debug(debugFLIP);
 
+  enemyIndicator();
   displayPointsText();
 }
 
@@ -251,4 +252,61 @@ function increaseEnemySpeed(itemType) {
       dragon.speed += points / 1000; //most speed added
       break;
   }
+}
+
+function enemyIndicator() {
+  //ADAM this function will calculate and show a diamond indicator on the screen to show where the enemy is in relation to the player
+  let x, y;
+
+  //calculate the pixel difference between the dragon and the center of the screen (has to include the current camera offset from origin)
+  let dx = width / 2 - camera.Xtranslate - camera.Xoffset - dragon.x;
+  let dy = height / 2 - camera.Ytranslate - camera.Yoffset - dragon.y;
+
+  //if that distance is less than half of screen size, dont display the indicator
+  if (abs(dx) < width / 2 && abs(dy) < height / 2) return;
+
+  //calculate the angle between center of screen and dragon (up is -90, down is 90)
+  let angle = atan2(dy, dx);
+
+  //check which "quadrant" the dragon is in (in relation to center of screen), and map the coordinates of the indicator to only appear near the edges of the screen
+  if (angle >= -45 && angle <= 45) {
+    //left screen edge
+    x = 10;
+    y = map(angle, -45, 45, height - 10, 10);
+  } else if (angle <= -135 && angle >= -180) {
+    //bottom-half right screen edge
+    x = width - 10;
+    y = map(angle, -135, -180, height - 10, height / 2);
+  } else if (angle >= 135 && angle <= 180) {
+    //top-half right screen edge
+    x = width - 10;
+    y = map(angle, 135, 180, 10, height / 2);
+  } else if (angle > -135 && angle < -45) {
+    //bottom screen edge
+    x = map(angle, -135, -45, width - 10, 10);
+    y = height - 10;
+  } else if (angle < 135 && angle > 45) {
+    //top screen edge
+    x = map(angle, 135, 45, width - 10, 10);
+    y = 10;
+  }
+
+  //since this function is called within displayGraphics (which uses the translate function), we need to remove the camera translation to achieve screen space; there could've been a way to not use this but the alternative seemed confusing in it's own right
+  x = x - camera.Xtranslate - camera.Xoffset;
+  y = y - camera.Ytranslate - camera.Yoffset;
+  // console.log(angle);
+  // console.log(x, y);
+
+  //set the graphic of the indicator
+  push();
+  rectMode(CENTER);
+  translate(x, y); //without this translate the indicator wont move with the camera
+  rotate(45); //rotation to achieve diamond shape
+  stroke(180, 0, 180); //light purple
+  strokeWeight(3);
+  fill(100, 0, 100); //darker purple
+  rect(0, 0, 30, 30);
+  fill(0);
+  circle(0, 0, 10);
+  pop();
 }
