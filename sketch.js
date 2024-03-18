@@ -18,19 +18,13 @@ let debugFLIP = false; //true turns on all debug functions
 
 //COLLECTIBLES; jasveen, adam, ishma
 let points = 0;
-let pointValues = {
-  E: 2, // emeralds
-  P: 5, // potions
-  S: 10 // stars
-}
-
 //numbers for each collectible
 let emeraldsNum = 10;
 let potionsNum = 5;
 let starsNum = 2;
-let emeralds = [];
-let emeraldImage;
+let collectibles = [];
 
+let collectibleSprites = [];
 
 function preload() {
   textures[0] = loadImage("JESS ASSETS/leafy.png");
@@ -41,7 +35,14 @@ function preload() {
     right: loadImage("JESS ASSETS/fairy.png"),
   };
 
-  emeraldImage = loadImage("JESS ASSETS/emerald.png");
+  // collectibleSprites = {
+  //   emeralds: loadImage("JESS ASSETS/emerald.png"),
+  //   potions: loadImage("JESS ASSETS/potion.png"),
+  //   stars: loadImage("JESS ASSETS/star.png")
+  // }
+  collectibleSprites[0] = loadImage("JESS ASSETS/emerald.png");
+  collectibleSprites[1] = loadImage("JESS ASSETS/potion.png");
+  collectibleSprites[2] = loadImage("JESS ASSETS/star.png");
 
 }
 
@@ -62,10 +63,16 @@ function setup() {
     textureMap
   );
 
-  for(let i=0 ; i<emeraldsNum; i++) {
-    spawnEmerald();
+  for(let i=0 ;i<emeraldsNum ;i++) {
+    spawnCollectible("E");
   }
-  // console.log(emeralds);
+  for(let i=0 ;i<potionsNum ;i++) {
+    spawnCollectible("P");
+  }
+  for(let i=0 ;i<starsNum ;i++) {
+    spawnCollectible("S");
+  }
+  console.log(collectibles);
   
 } // END OF SETUP
 
@@ -94,9 +101,9 @@ function DisplayGraphics() {
     }
   } 
   // Display and check collision for each emerald
-  for (let i = 0; i < emeralds.length; i++) {
-    emeralds[i].display();
-    emeralds[i].checkCollision(player);
+  for (let i = 0; i < collectibles.length; i++) {
+    collectibles[i].display();
+    collectibles[i].checkCollision(player);
   }
 
 
@@ -147,57 +154,60 @@ function keyPressed() {
   player.setDirection();
 }
 
-function spawnEmerald() {
+function spawnCollectible(type) {
   let across, down;
   do {
     across = floor(random(0, mapSize));
     down = floor(random(0, mapSize));
   } while (textureMap[down][across] === 1); // Check if the position overlaps with a crystal tile
-
-  emeralds.push(new Emerald(emeraldImage, across, down, tileSize, "E"));
+  collectibles.push(new Collectible(across, down, tileSize, type));
 }
 
-//EMERALD CLASS
-class Emerald {
-  constructor(image, across, down, size, type) {
-    this.image = image;
+//COLLECTIBLES CLASS
+class Collectible {
+  constructor(across, down, size, type) {
+    this.sprite;
     this.across = across;
     this.down = down;
     this.size = size;
     this.x = this.across * this.size;
     this.y = this.down * this.size;
-    this.type = type
-    this.pointValues = pointValues
+    this.type = type;
     this.points;
     this.isCollected = false;
   }
 
-  checkPointValues() {
-    if(this.type = this.pointValues.E) {
+  checkType() {
+    if(this.type = "E") {
       this.points = 2;
-    } else if (this.type = this.pointValues.P) {
+      this.sprite = collectibleSprites[0];
+    } else
+    if (this.type = "P") {
       this.points = 5;
-    } else if (this.type = this.pointValues.S) {
+      this.sprite = collectibleSprites[1];
+    } else
+    if (this.type = "S") {
       this.points = 10;
+      this.sprite = collectibleSprites[2];
     }
   }
 
+
   display() {
+    this.checkType();
     if (!this.isCollected) {
-      image(this.image, this.x, this.y, this.size, this.size);
+      image(this.sprite, this.x, this.y, this.size, this.size);
     }
   }
 
   checkCollision(player) {
     if (!this.isCollected && dist(player.x, player.y, this.x, this.y ) < tileSize / 2) {
       this.isCollected = true;
-      
-      this.checkPointValues();
-      
+            
       increasePoints(this.points);
       
-      spawnEmerald();
-      // console.log(emeralds);
+      spawnCollectible(this.type);
+      // console.log(collectibles);
     }
   }
 
