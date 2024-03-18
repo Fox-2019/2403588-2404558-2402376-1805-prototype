@@ -47,6 +47,20 @@ class Dragon {
       this.y = newY;
     }
   }
+  dragonFreeze() {
+    console.log("Dragon frozen");
+    //save the current enemy speed
+    let savedSpeed = this.speed;
+    this.speed = 0;
+
+    //set the speed to 0 for 3 seconds
+    for (let f = 0; f < fps * 3; f++) {
+      this.speed += f / 10000;
+    }
+
+    //revert speed to previous
+    this.speed = savedSpeed;
+  }
 
   display() {
     image(this.image, this.x, this.y, this.size, this.size);

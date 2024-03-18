@@ -37,6 +37,7 @@ class Collectible {
 
       //spawns a collectible of the same type
       spawnCollectible(this.type);
+      increaseEnemySpeed(this.type);
       // console.log(collectibles);
     }
   }

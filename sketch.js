@@ -1,5 +1,6 @@
 let debugFLIP = true; //true turns on all debug functions
 let camera;
+let fps = 60;
 
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
@@ -23,10 +24,10 @@ let starsNum = 2;
 let collectibles = [];
 let collectibleSprites = [];
 
-//DRAGON; jess, adam
+//DRAGON; jasveen
 let dragon;
 let dragonImage;
-let dragonSpeed = 1; // Initial speed of the dragon
+let dragonSpeed = 0.5; // Initial speed of the dragon
 
 function preload() {
   textures[0] = loadImage("JESS ASSETS/leafy.png");
@@ -46,6 +47,7 @@ function preload() {
 
 function setup() {
   createCanvas(550, 550);
+  frameRate(fps);
   try {
     GenerateTextureMap();
     GenerateTileMap();
@@ -71,6 +73,7 @@ function setup() {
     for (let i = 0; i < starsNum; i++) {
       spawnCollectible("S");
     }
+    // console.log(collectibles);
 
     // Initialize the dragon
     let dragonX, dragonY;
@@ -97,7 +100,6 @@ function setup() {
     );
     noLoop(); // Stop the game loop
   }
-  // console.log(collectibles);
 } // END OF SETUP
 
 function draw() {
@@ -220,4 +222,19 @@ function spawnCollectible(type) {
   } while (textureMap[down][across] === 1 || collectibleExists);
 
   collectibles.push(new Collectible(type, across, down, tileSize));
+}
+
+function increaseEnemySpeed(itemType) {
+  switch (itemType) {
+    case "E":
+      dragon.speed += points / 5000;
+      break;
+    case "P":
+      dragon.speed += points / 2000;
+      dragon.dragonFreeze();
+      break;
+    case "S":
+      dragon.speed += points / 1000;
+      break;
+  }
 }
