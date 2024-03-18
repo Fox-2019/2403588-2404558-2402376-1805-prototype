@@ -5,12 +5,17 @@ class Dragon {
     this.y = y * tileSize;
     this.size = size;
     this.speed = speed;
+    this.slowdownMultiplier = 0;
     this.textureMap = textureMap;
   }
 
   move(target) {
     let targetX = target.x;
     let targetY = target.y;
+
+    if (this.slowdownMultiplier < 1) {
+      this.slowdownMultiplier += 0.005;
+    }
 
     // Calculate direction towards the target
     let dx = targetX - this.x;
@@ -19,47 +24,19 @@ class Dragon {
     // Move towards the target
     if (dx !== 0 || dy !== 0) {
       let angle = atan2(dy, dx);
-      let newX = this.x + cos(angle) * this.speed;
-      let newY = this.y + sin(angle) * this.speed;
+      let newX = this.x + cos(angle) * this.speed * this.slowdownMultiplier;
+      let newY = this.y + sin(angle) * this.speed * this.slowdownMultiplier;
 
       // Check if the next position is a crystal tile
       let nextTileX = floor(newX / tileSize);
       let nextTileY = floor(newY / tileSize);
-      if (this.textureMap[nextTileY][nextTileX] === 1) {
-        // If the next position is a crystal tile, try to find an alternative path
-        let alternatives = [
-          { x: nextTileX + 1, y: nextTileY }, // Right
-          { x: nextTileX - 1, y: nextTileY }, // Left
-          { x: nextTileX, y: nextTileY + 1 }, // Down
-          { x: nextTileX, y: nextTileY - 1 }, // Up
-        ];
-
-        for (let alt of alternatives) {
-          if (this.textureMap[alt.y][alt.x] !== 1) {
-            newX = alt.x * tileSize;
-            newY = alt.y * tileSize;
-            break;
-          }
-        }
-      }
 
       this.x = newX;
       this.y = newY;
     }
   }
   dragonFreeze() {
-    console.log("Dragon frozen");
-    //save the current enemy speed
-    let savedSpeed = this.speed;
-    this.speed = 0;
-
-    //set the speed to 0 for 3 seconds
-    for (let f = 0; f < fps * 3; f++) {
-      this.speed += f / 10000;
-    }
-
-    //revert speed to previous
-    this.speed = savedSpeed;
+    this.slowdownMultiplier = 0;
   }
 
   display() {
@@ -68,6 +45,7 @@ class Dragon {
 
   debug(isON) {
     if (isON) {
+      // console.log(this.speed);
       stroke(0);
       fill(0, 0, 0, 100);
       rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
