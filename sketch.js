@@ -14,14 +14,14 @@ let playerSize = tileSize;
 
 let camera;
 
-let debugFLIP = false; //true turns on all debug functions
+let debugFLIP = true; //true turns on all debug functions
 
 
 //ishma & jasveen with adams help
 //Collectibles system variables
 let points = 0
 let pickUpsArr = []; //array of collectibles
-let collectNum = 7; //number of collectibles at any time
+let collectNum = 100; //number of collectibles at any time
 let collectibeSprite;
 
 
@@ -50,9 +50,13 @@ function setup() {
   //uses the generated texture map to create a 'tile map' and create the objects for each tile
   GenerateTileMap();
   // console.log(tilemap);
-  //ISHMA create collectibles
-  generateCollectibles(collectNum);
-  console.log(pickUpsArr);
+
+  //ISHMA & JASVEEN create collectibles
+  for(let i=0; i<collectNum; i++) {
+    generateCollectible();
+  }
+  // console.log(pickUpsArr);
+  // console.log(textureMap)
 
 
   camera = new Camera();
@@ -69,7 +73,8 @@ function setup() {
 
 function draw() {
   background(50);
-
+  push();
+  
   DisplayGraphics();
   player.move();
   camera.move();
@@ -81,12 +86,13 @@ function draw() {
 //AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles 
 function DisplayGraphics() {
 
+  //translate every graphic to appear as if a camera was following the player
   translate(
     camera.Xtranslate + camera.Xoffset,
     camera.Ytranslate + camera.Yoffset
   );
 
-
+    //display the tiles
   for (let across = 0; across < mapSize; across++) {
     for (let down = 0; down < mapSize; down++) {
       tilemap[across][down].display();
@@ -94,10 +100,10 @@ function DisplayGraphics() {
     }
   }
 
+  //display the pickups
   for (let i=0; i<collectNum; i++) {
-    let temp;
-    temp = pickUpsArr[i].display();
-    // pickUpsArr[i].intersects();
+    pickUpsArr[i].display();
+    pickUpsArr[i].checkCollisions(player);
   }
 
   player.display();
@@ -113,6 +119,7 @@ function displayPointsText() {
   strokeWeight(10);
   fill(255);
   text("points:" + points, width-camera.Xtranslate+camera.Xoffset-80, -camera.Ytranslate+camera.Yoffset);
+  pop();
 }
 
 function GenerateTextureMap() {
@@ -159,15 +166,25 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
-function generateCollectibles(num) {
-  for (let i = 0; i < num; i++) {
-    let across = floor(random(mapSize));
-    let down = floor(random(mapSize));
-    let x = across * tileSize;
-    let y = down * tileSize;
-    pickUpsArr.push(new Collectible(x, y));
-  }
+
+function generateCollectible() {
+  let x, y, across, down;
+  do {
+    across = floor(random(0,mapSize));
+    down = floor(random(0,mapSize));
+  } while (textureMap[down][across] === 1);
+
+  x = across * tileSize;
+  y = down * tileSize;
+  pickUpsArr.push(new Collectible(x, y));
 }
+
+/*
+if you have value for across and down, you can access the tile by
+tilemap[across][down].textureID -> this will get you 1 or 0
+if (tilemap[across][down].textureID === 1)
+
+*/
 
 class Collectible {
   constructor(x, y) {
@@ -175,13 +192,22 @@ class Collectible {
     this.y = y;
     this.size = tileSize;
     this.collected = false;
+    this.pickUpType;
+    this.points;
   }
 
-  //Player Interactipn with collectible.
-  intersects() {
-    let d = dist(player.x, player.y, this.x,this.y);
+  //
+  checkCollisions(player) {
+    let d = dist(player.x, player.y, this.x * tileSize, this.y * tileSize);
+    
+    if(d < player.size + this.size) {
+      this.pickUp();
+      console.log(this.collected)
+    }
 
-    return d < player.size / 2 + this.size / 2;
+    if(!this.collected && d < tileSize/2) {
+      this.collected = true;
+    }
   }
 
   display() {
@@ -190,7 +216,7 @@ class Collectible {
     }
   }
 
-  pickup() {
+  pickUp() {
     this.collected = true;
   }
 }
