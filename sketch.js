@@ -63,6 +63,7 @@ function setup() {
     playerSpeed,
     textureMap
   );
+  
 } // END OF SETUP
 
 function draw() {
@@ -100,6 +101,7 @@ function DisplayGraphics() {
   }
   
 
+  player.update();
   player.display();
   player.debug(debugFLIP);
 }
@@ -160,7 +162,13 @@ function generateCollectibles(num) {
   }
 }
 
+//Collectibles
+<<<<<<< HEAD
+
+class Collectible { 
+=======
 class Collectible {
+>>>>>>> 531fdd6e9a4a21ab3d39f18f76df0b7ee98d17bc
   constructor(x, y) {
     this.x = x;
     this.y = y;
@@ -176,7 +184,7 @@ class Collectible {
   }
 
   display() {
-    if (!this.collected) {
+    if (this.collected) {
       image(collectibleSprite, this.x, this.y, this.size, this.size);
     }
   }
