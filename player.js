@@ -1,11 +1,12 @@
 class Player {
   constructor(sprites, startAcross, startDown, size, speed, tileRules) {
     this.sprites = sprites;
+    // this.currentSprite = this.sprites.right;
     this.across = startAcross;
     this.down = startDown;
     this.x = this.across * size;
     this.y = this.down * size;
-    this.size = size; // Added size parameter
+    this.tileSize = size;
     this.speed = speed;
     this.tileRules = tileRules;
     this.dirX = 0;
@@ -13,23 +14,34 @@ class Player {
     this.isMoving = false;
     this.tX = this.x;
     this.tY = this.y;
-  };
+  }
 
   setDirection() {
     if (!this.isMoving) {
       if (key === "w") {
         this.dirX = 0;
         this.dirY = -1;
-      } else if (key === "s") {
+        // this.currentSprite = this.sprites.up;
+      }
+
+      if (key === "s") {
         this.dirX = 0;
         this.dirY = 1;
-      } else if (key === "a") {
+        // this.currentSprite = this.sprites.down;
+      }
+
+      if (key === "a") {
         this.dirX = -1;
         this.dirY = 0;
-      } else if (key === "d") {
+        // this.currentSprite = this.sprites.left;
+      }
+
+      if (key === "d") {
         this.dirX = 1;
         this.dirY = 0;
+        // this.currentSprite = this.sprites.right;
       }
+
       this.checkTargetTile();
     }
   }
@@ -41,22 +53,25 @@ class Player {
     let nextTileHorizontal = this.across + this.dirX;
     let nextTileVertical = this.down + this.dirY;
 
+    //check if tile within map
     if (
       nextTileHorizontal >= 0 &&
       nextTileHorizontal < mapSize &&
       nextTileVertical >= 0 &&
       nextTileVertical < mapSize
     ) {
+      //if it is, check if targetTile walkable
       if (this.tileRules[nextTileVertical][nextTileHorizontal] != 1) {
-        this.tX = nextTileHorizontal * this.size;
-        this.tY = nextTileVertical * this.size;
+        this.tX = nextTileHorizontal * this.tileSize;
+        this.tY = nextTileVertical * this.tileSize;
+
+        camera.moveIfOffscreen();
         this.isMoving = true;
       }
     }
   }
 
   move() {
-    // Move player
     if (this.isMoving) {
       this.x += this.speed * this.dirX;
       this.y += this.speed * this.dirY;
@@ -70,10 +85,8 @@ class Player {
   }
 
   display() {
-    // Display player sprite
-    image(this.sprites, this.x, this.y, this.size, this.size);
+    image(this.sprites, this.x, this.y, this.tileSize, this.tileSize);
   }
-
 
   debug(isON) {
     if (isON) {
@@ -82,6 +95,4 @@ class Player {
       rect(this.x, this.y, this.tileSize, this.tileSize);
     }
   }
-
 }
-

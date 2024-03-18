@@ -1,5 +1,5 @@
 //TILEMAPS
-let tileSize = 20; //pixel size of tiles
+let tileSize = 50; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
 let tilemap = []; // contains each tile Object: outer array is Y inner arrays are Xs; tilemap[y][x]
 let textures = [];
@@ -28,6 +28,7 @@ let collectibeSprite;
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
+
   playerSprite = loadImage("fairy.png");
   collectibleSprite = loadImage("coin.jpg");
 
@@ -50,9 +51,9 @@ function setup() {
   //uses the generated texture map to create a 'tile map' and create the objects for each tile
   GenerateTileMap();
   // console.log(tilemap);
-
   //ISHMA create collectibles
   generateCollectibles(collectNum);
+
 
   camera = new Camera();
   player = new Player(
@@ -78,6 +79,7 @@ textSize(20);
 fill(255);
 text("points:"+points,width-50,30);
 
+
 } //END OF DRAW
 
 
@@ -94,14 +96,11 @@ function DisplayGraphics() {
       tilemap[across][down].debug(debugFLIP);
     }
   }
-
   for (let i=0; i<=collectNum; i++) {
     pickUpsArr[i].display();
     // pickUpsArr[i].intersects();
   }
-  
 
-  player.update();
   player.display();
   player.debug(debugFLIP);
 }
@@ -150,8 +149,6 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
-
-
 function generateCollectibles(num) {
   for (let i = 0; i < num; i++) {
     let across = random(mapSize);
@@ -187,4 +184,3 @@ class Collectible {
     this.collected = true;
   }
 }
-
