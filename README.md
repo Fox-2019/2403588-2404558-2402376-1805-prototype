@@ -58,7 +58,7 @@ I chose specific items to create for powerups such as emeralds relating back to 
 # Concept Art
 ![concept](concept.png)
 
-Experimental sketch art deicting the colours and flow we decided that the game should have.
+Experimental sketch art depicting the colours and flow we decided that the game should have.
 The enviroment is dark and overgrown allowing for that theme of adventure to be realised while at contrast with the light baby blue of our main player who lights the way tying nicely into the fantasy genre that we where hoping to achive, the dragons stalking closer to push the player to gain as many points as they can therefore creating an effective game cycle  with the inclusion of the differeing mechanics within the code.
 # Author
 
