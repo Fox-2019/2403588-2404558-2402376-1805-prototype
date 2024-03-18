@@ -1,10 +1,10 @@
-let debugFLIP = true; //true turns on all debug functions
+let debugFLIP = false; //true turns on all debug functions
 let camera;
 let fps = 60;
 
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
-let mapSize = 10; // n x n size of the tilemap
+let mapSize = 30; // n x n size of the tilemap
 let tilemap = []; // contains each tile Object: outer array is Y inner arrays are Xs; tilemap[y][x]
 let textures = [];
 let textureMap = []; // same as tilemap but this determines which tile graphic is shown
@@ -18,13 +18,13 @@ let playerSize = tileSize;
 
 //COLLECTIBLES; jasveen, adam, ishma
 let points = 0;
-let emeraldsNum = 10; //numbers for each collectible
-let potionsNum = 5;
-let starsNum = 2;
+let emeraldsNum = 25; //numbers for each collectible
+let potionsNum = 10;
+let starsNum = 15;
 let collectibles = [];
 let collectibleSprites = [];
 
-//DRAGON; jasveen
+//DRAGON; jasveen, jess
 let dragon;
 let dragonImage;
 let dragonSpeed = 0.5; // Initial speed of the dragon
@@ -63,7 +63,7 @@ function setup() {
       textureMap
     );
 
-    //generate each type of collectibles using a parameter
+  //initial generation of each type of collectibles using a parameter
     for (let i = 0; i < emeraldsNum; i++) {
       spawnCollectible("E");
     }
@@ -75,6 +75,8 @@ function setup() {
     }
     // console.log(collectibles);
 
+  //JASVEEN; code to create the dragon
+  try {
     // Initialize the dragon
     let dragonX, dragonY;
     do {
@@ -112,9 +114,10 @@ function draw() {
   camera.move();
 }
 
-//AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles
 function DisplayGraphics() {
-  //translate every graphic to appear as if a camera was following the player
+  //ADAM; uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs any display function (for any graphics or UI)
+
+  //translate every graphic ran below to appear as if a camera was following the player
   translate(
     camera.Xtranslate + camera.Xoffset,
     camera.Ytranslate + camera.Yoffset
@@ -127,6 +130,7 @@ function DisplayGraphics() {
       tilemap[across][down].debug(debugFLIP);
     }
   }
+
   // Display and check collision for each collectible
   for (let i = 0; i < collectibles.length; i++) {
     collectibles[i].display();
@@ -144,10 +148,13 @@ function DisplayGraphics() {
 }
 
 function displayPointsText() {
+  //shows top right box with "points" text
+  push();
   textAlign(RIGHT);
   textSize(20);
   noStroke();
   fill(50, 50, 50, 200);
+  //since this function is ran in displayGraphics both the box and the text need the camera tranlation; probably couldve pulled it out to not have to deal with the offsets
   rect(
     width - camera.Xtranslate + camera.Xoffset - 190,
     -camera.Ytranslate + camera.Yoffset - 25,
@@ -166,6 +173,7 @@ function displayPointsText() {
 }
 
 function GenerateTextureMap() {
+  //randomly generates the texture map which determines which tiles are walkable and which arent
   for (let y = 0; y < mapSize; y++) {
     textureMap[y] = [];
     for (let x = 0; x < mapSize; x++) {
@@ -177,6 +185,7 @@ function GenerateTextureMap() {
 }
 
 function GenerateTileMap() {
+  //uses the existing texture map to make the tile objects and set their parameters
   let id = 0;
   for (let across = 0; across < mapSize; across++) {
     tilemap[across] = [];
@@ -198,11 +207,13 @@ function increasePoints(amount) {
 }
 
 function keyPressed() {
-  camera.SetCamDir();
-  player.setDirection();
+  //any time a key is pressed, these two will run...
+  camera.SetCamDir(); //this will set the direction for the camera
+  player.setDirection(); //and this for the player
 }
 
 function spawnCollectible(type) {
+  //ISH,JASVEEN,ADAM; funtion to be called any time we want a new item on the map
   let across, down, collectibleExists;
 
   do {
@@ -221,20 +232,22 @@ function spawnCollectible(type) {
     // Check if the position overlaps with a crystal tile and if there is a collectible in the generated coordinates
   } while (textureMap[down][across] === 1 || collectibleExists);
 
+  //add new items to the array
   collectibles.push(new Collectible(type, across, down, tileSize));
 }
 
 function increaseEnemySpeed(itemType) {
+  //depending on what type of item the player picks up, a different speed is applied
   switch (itemType) {
     case "E":
-      dragon.speed += points / 5000;
+      dragon.speed += points / 5000; //least speed added
       break;
     case "P":
-      dragon.speed += points / 2000;
+      dragon.speed += points / 2000; //medium speed but freeze effect
       dragon.dragonFreeze();
       break;
     case "S":
-      dragon.speed += points / 1000;
+      dragon.speed += points / 1000; //most speed added
       break;
   }
 }

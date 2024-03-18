@@ -37,6 +37,8 @@ class Collectible {
 
       //spawns a collectible of the same type
       spawnCollectible(this.type);
+
+      //speed increase dependent on item type
       increaseEnemySpeed(this.type);
       // console.log(collectibles);
     }
@@ -48,6 +50,7 @@ class Collectible {
 
   debug(isON) {
     if (isON) {
+      push();
       switch (this.type) {
         case "E":
           stroke(0, 240, 0);
@@ -61,6 +64,7 @@ class Collectible {
       }
       noFill();
       rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
+      pop();
     }
   }
 }

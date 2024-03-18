@@ -65,6 +65,7 @@ class Player {
         this.tX = nextTileHorizontal * this.tileSize;
         this.tY = nextTileVertical * this.tileSize;
 
+        //camera move is ran before the player movement so by the time the player stops moving the camera will have moved aswell
         camera.moveIfOffscreen();
         this.isMoving = true;
       }
@@ -90,9 +91,11 @@ class Player {
 
   debug(isON) {
     if (isON) {
+      push();
       stroke(245);
       fill(255, 255, 255, 100);
       rect(this.x + 2, this.y + 2, this.tileSize - 4, this.tileSize - 4);
+      pop();
     }
   }
 }
