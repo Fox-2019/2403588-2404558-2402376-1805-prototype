@@ -9,9 +9,11 @@ class Collectible {
     this.y = this.down * this.size;
     this.type = type;
     this.points;
-    this.isCollected = false;
+    this.checkType(); //this function run each time the object is constructed
+    // console.log(`Collectible ${this.type} created`);
   }
 
+  //check the item type to determine which sprite to display and how many points to award
   checkType() {
     if (this.type == "E") {
       this.points = 2;
@@ -26,10 +28,7 @@ class Collectible {
   }
 
   display() {
-    this.checkType();
-    if (!this.isCollected) {
       image(this.sprite, this.x, this.y, this.size, this.size);
-    }
   }
 
   checkCollision(player) {
@@ -41,6 +40,7 @@ class Collectible {
 
       increasePoints(this.points);
 
+      //spawns a collectible of the same type
       spawnCollectible(this.type);
       // console.log(collectibles);
     }
