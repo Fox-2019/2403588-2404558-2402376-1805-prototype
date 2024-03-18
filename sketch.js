@@ -161,6 +161,13 @@ function spawnEmerald() {
   emeralds.push(new Emerald(emeraldImage, x, y, tileSize));
 }
 
+function respawnEmeralds() {
+  emeralds = []; // Clear existing emeralds
+  for (let i = 0; i < 4; i++) { // Respawn 4 emeralds
+    spawnEmerald();
+  }
+}
+
 // Dragon class
 class Dragon {
   constructor(image, x, y, size, speed, textureMap) {
@@ -186,5 +193,6 @@ class Dragon {
     image(this.image, this.x, this.y, this.size, this.size);
   }
 }
+
 
 
