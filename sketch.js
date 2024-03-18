@@ -1,3 +1,32 @@
+//EMERALD CLASS
+class Emerald {
+  constructor(image, x, y, size) {
+    this.image = image;
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.isCollected = false;
+  }
+
+  display() {
+    if (!this.isCollected) {
+      image(this.image, this.x * tileSize, this.y * tileSize, this.size, this.size);
+    }
+  }
+
+  checkCollision(player) {
+    if (!this.isCollected && dist(player.x, player.y, this.x * tileSize, this.y * tileSize) < tileSize / 2) {
+      this.isCollected = true;
+      increasePoints(2);
+      respawnEmeralds();
+    }
+  }
+}
+
+// Declare Emerald objects array and load its image
+let emeralds = [];
+let emeraldImage;
+
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
@@ -16,10 +45,9 @@ let camera;
 
 let debugFLIP = true; //true turns on all debug functions
 
-
 //ishma & jasveen with adams help
 //Collectibles system variables
-let points = 0
+let points = 0;
 let pickUpsArr = []; //array of collectibles
 let collectNum = 100; //number of collectibles at any time
 let collectibeSprite;
@@ -42,12 +70,7 @@ function preload() {
 
 function setup() {
   createCanvas(550, 550);
-  // imageMode(CENTER);
-
-  //generates the n x n map to determine where obstacle wall tiles are located
   GenerateTextureMap();
-
-  //uses the generated texture map to create a 'tile map' and create the objects for each tile
   GenerateTileMap();
   // console.log(tilemap);
 
@@ -78,12 +101,18 @@ function draw() {
   DisplayGraphics();
   player.move();
   camera.move();
+  textAlign(RIGHT);
+  textSize(20);
+  fill(255);
+  text("points:" + points, width - 50, 30);
 
+  // Display and check collision for each emerald
+  for (let i = 0; i < emeralds.length; i++) {
+    emeralds[i].display();
+    emeralds[i].checkCollision(player);
+  }
+}
 
-
-} //END OF DRAW
-
-//AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles 
 function DisplayGraphics() {
 
   //translate every graphic to appear as if a camera was following the player
@@ -105,7 +134,6 @@ function DisplayGraphics() {
     pickUpsArr[i].display();
     pickUpsArr[i].checkCollisions(player);
   }
-
   player.display();
   player.debug(debugFLIP);
   displayPointsText();
@@ -125,12 +153,9 @@ function displayPointsText() {
 function GenerateTextureMap() {
   for (let y = 0; y < mapSize; y++) {
     textureMap[y] = [];
-
     for (let x = 0; x < mapSize; x++) {
-      //whether tile is walkable or not is choosen randomly, 1 in 10 chance it'll be a stone
       let tileGen = floor(random(1, 11));
       if (tileGen > 1) tileGen = 0;
-
       textureMap[y][x] = tileGen;
     }
   }
@@ -138,28 +163,17 @@ function GenerateTextureMap() {
 
 function GenerateTileMap() {
   let id = 0;
-  // X loop
   for (let across = 0; across < mapSize; across++) {
     tilemap[across] = [];
-    // Y loop
     for (let down = 0; down < mapSize; down++) {
-      tilemap[across][down] = new Tile(
-        textureMap[down][across],
-        across,
-        down,
-        tileSize,
-        id
-      );
-
+      tilemap[across][down] = new Tile(textureMap[down][across], across, down, tileSize, id);
       id++;
     }
   }
 }
 
-//Not complete version need to link enemy code to the point system
-//Function to increase points
-function increasePoints(amount){
-  points+=amount;
+function increasePoints(amount) {
+  points += amount;
 }
 
 function keyPressed() {
@@ -167,56 +181,21 @@ function keyPressed() {
   player.setDirection();
 }
 
-function generateCollectible() {
-  let x, y, across, down;
+function spawnEmerald() {
+  let x, y;
   do {
-    across = floor(random(0,mapSize));
-    down = floor(random(0,mapSize));
-  } while (textureMap[down][across] === 1);
+    x = floor(random(0, mapSize));
+    y = floor(random(0, mapSize));
+  } while (textureMap[y][x] === 1); // Check if the position overlaps with a crystal tile
 
-  x = across * tileSize;
-  y = down * tileSize;
-  pickUpsArr.push(new Collectible(x, y));
+  emeralds.push(new Emerald(emeraldImage, x, y, tileSize));
 }
 
-/*
-if you have value for across and down, you can access the tile by
-tilemap[across][down].textureID -> this will get you 1 or 0
-if (tilemap[across][down].textureID === 1)
-
-*/
-
-class Collectible {
-  constructor(x, y) {
-    this.x = x;
-    this.y = y;
-    this.size = tileSize;
-    this.collected = false;
-    this.pickUpType;
-    this.points;
-  }
-
-  //
-  checkCollisions(player) {
-    let d = dist(player.x, player.y, this.x * tileSize, this.y * tileSize);
-    
-    if(d < player.size + this.size) {
-      this.pickUp();
-      console.log(this.collected)
-    }
-
-    if(!this.collected && d < tileSize/2) {
-      this.collected = true;
-    }
-  }
-
-  display() {
-    if (!this.collected) {
-      image(collectibleSprite, this.x, this.y, this.size, this.size);
-    }
-  }
-
-  pickUp() {
-    this.collected = true;
+function respawnEmeralds() {
+  emeralds = []; // Clear existing emeralds
+  for (let i = 0; i < 2; i++) { // Respawn 2 emeralds
+    spawnEmerald();
   }
 }
+
+
