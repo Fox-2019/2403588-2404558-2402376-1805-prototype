@@ -27,10 +27,6 @@ class Collectible {
     }
   }
 
-  display() {
-    image(this.sprite, this.x, this.y, this.size, this.size);
-  }
-
   checkCollision(player) {
     //if the distance between the item and player is small enough...
     if (dist(player.x, player.y, this.x, this.y) < tileSize / 2) {
@@ -42,6 +38,28 @@ class Collectible {
       //spawns a collectible of the same type
       spawnCollectible(this.type);
       // console.log(collectibles);
+    }
+  }
+
+  display() {
+    image(this.sprite, this.x, this.y, this.size, this.size);
+  }
+
+  debug(isON) {
+    if (isON) {
+      switch (this.type) {
+        case "E":
+          stroke(0, 240, 0);
+          break;
+        case "P":
+          stroke(0, 0, 240);
+          break;
+        case "S":
+          stroke(240, 240, 0);
+          break;
+      }
+      noFill();
+      rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
     }
   }
 }

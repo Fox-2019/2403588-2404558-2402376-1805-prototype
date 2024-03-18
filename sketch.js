@@ -1,4 +1,4 @@
-let debugFLIP = false; //true turns on all debug functions
+let debugFLIP = true; //true turns on all debug functions
 let camera;
 
 //TILEMAPS
@@ -23,7 +23,7 @@ let starsNum = 2;
 let collectibles = [];
 let collectibleSprites = [];
 
-//DRAGON
+//DRAGON; jess, adam
 let dragon;
 let dragonImage;
 let dragonSpeed = 1; // Initial speed of the dragon
@@ -82,7 +82,7 @@ function setup() {
       dragonImage,
       dragonX,
       dragonY,
-      playerSize,
+      tileSize,
       dragonSpeed,
       textureMap
     );
@@ -109,6 +109,7 @@ function draw() {
   dragon.move(player); // Move the dragon towards the player
   camera.move();
 }
+
 //AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles
 function DisplayGraphics() {
   //translate every graphic to appear as if a camera was following the player
@@ -127,12 +128,16 @@ function DisplayGraphics() {
   // Display and check collision for each collectible
   for (let i = 0; i < collectibles.length; i++) {
     collectibles[i].display();
+    collectibles[i].debug(debugFLIP);
     collectibles[i].checkCollision(player);
   }
 
   player.display();
   player.debug(debugFLIP);
-  dragon.display(); // Display the dragon
+
+  dragon.display();
+  dragon.debug(debugFLIP);
+
   displayPointsText();
 }
 
@@ -153,7 +158,7 @@ function displayPointsText() {
   text(
     "points:" + points,
     width - camera.Xtranslate + camera.Xoffset - 85,
-    -camera.Ytranslate + camera.Yoffset + 1
+    -camera.Ytranslate + camera.Yoffset - 20
   );
   pop();
 }

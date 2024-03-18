@@ -8,15 +8,15 @@ class Dragon {
     this.textureMap = textureMap;
   }
 
-  move(player) {
-    let targetX = player.x;
-    let targetY = player.y;
+  move(target) {
+    let targetX = target.x;
+    let targetY = target.y;
 
-    // Calculate direction towards the player
+    // Calculate direction towards the target
     let dx = targetX - this.x;
     let dy = targetY - this.y;
 
-    // Move towards the player
+    // Move towards the target
     if (dx !== 0 || dy !== 0) {
       let angle = atan2(dy, dx);
       let newX = this.x + cos(angle) * this.speed;
@@ -50,5 +50,13 @@ class Dragon {
 
   display() {
     image(this.image, this.x, this.y, this.size, this.size);
+  }
+
+  debug(isON) {
+    if (isON) {
+      stroke(0);
+      fill(0, 0, 0, 100);
+      rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
+    }
   }
 }

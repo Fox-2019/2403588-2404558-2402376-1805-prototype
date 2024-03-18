@@ -18,9 +18,18 @@ class Tile {
   debug(isON) {
     if (isON) {
       //red outline
-      stroke(150, 0, 0);
-      fill(55, 55, 55, 150);
-      rect(this.x, this.y, this.tileSize, this.tileSize);
+      push();
+      if (this.textureID) {
+        strokeWeight(2);
+        stroke(250, 0, 250);
+        fill(150, 55, 150, 150);
+        rect(this.x + 1, this.y + 1, this.tileSize - 2, this.tileSize - 2);
+      } else {
+        stroke(150, 0, 0);
+        fill(55, 55, 55, 150);
+        rect(this.x, this.y, this.tileSize, this.tileSize);
+      }
+      pop();
 
       let tempID;
       tempID = this.across + ";" + this.down;

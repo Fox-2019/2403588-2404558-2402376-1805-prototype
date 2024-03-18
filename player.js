@@ -91,8 +91,8 @@ class Player {
   debug(isON) {
     if (isON) {
       stroke(245);
-      noFill();
-      rect(this.x, this.y, this.tileSize, this.tileSize);
+      fill(255, 255, 255, 100);
+      rect(this.x + 2, this.y + 2, this.tileSize - 4, this.tileSize - 4);
     }
   }
 }
