@@ -18,6 +18,7 @@ class Emerald {
     if (!this.isCollected && dist(player.x, player.y, this.x * tileSize, this.y * tileSize) < tileSize / 2) {
       this.isCollected = true;
       increasePoints(2);
+      respawnEmeralds();
     }
   }
 }
@@ -61,12 +62,9 @@ function setup() {
   player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
 
   // Initialize Emerald objects array with random positions
-  for (let i = 0; i < 10; i++) {
-    emeralds.push(new Emerald(emeraldImage, floor(random(0, mapSize)), floor(random(0, mapSize)), tileSize));
+  for (let i = 0; i < 2; i++) { // Initially spawn 2 emeralds
+    spawnEmerald();
   }
-
-  // Set respawn timer for emeralds
-  setInterval(respawnEmeralds, 5000); // Adjust the respawn time (in milliseconds) as needed
 }
 
 function draw() {
@@ -124,17 +122,21 @@ function increasePoints(amount) {
   points += amount;
 }
 
-function respawnEmeralds() {
-  for (let i = 0; i < emeralds.length; i++) {
-    if (emeralds[i].isCollected) {
-      emeralds[i].x = floor(random(0, mapSize));
-      emeralds[i].y = floor(random(0, mapSize));
-      emeralds[i].isCollected = false;
-    }
-  }
-}
-
 function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
+
+function spawnEmerald() {
+  let x = floor(random(0, mapSize));
+  let y = floor(random(0, mapSize));
+  emeralds.push(new Emerald(emeraldImage, x, y, tileSize));
+}
+
+function respawnEmeralds() {
+  emeralds = []; // Clear existing emeralds
+  for (let i = 0; i < 2; i++) { // Respawn 2 emeralds
+    spawnEmerald();
+  }
+}
+
