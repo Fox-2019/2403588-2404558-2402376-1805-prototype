@@ -28,15 +28,14 @@ class Collectible {
   }
 
   display() {
-      image(this.sprite, this.x, this.y, this.size, this.size);
+    image(this.sprite, this.x, this.y, this.size, this.size);
   }
 
   checkCollision(player) {
-    if (
-      !this.isCollected &&
-      dist(player.x, player.y, this.x, this.y) < tileSize / 2
-    ) {
-      this.isCollected = true;
+    //if the distance between the item and player is small enough...
+    if (dist(player.x, player.y, this.x, this.y) < tileSize / 2) {
+      //...filter the item array and return only the ones that arent the current one (ie remove current)
+      collectibles = collectibles.filter((c) => c != this);
 
       increasePoints(this.points);
 
