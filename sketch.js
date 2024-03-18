@@ -162,13 +162,7 @@ function generateCollectibles(num) {
   }
 }
 
-//Collectibles
-<<<<<<< HEAD
-
-class Collectible { 
-=======
 class Collectible {
->>>>>>> 531fdd6e9a4a21ab3d39f18f76df0b7ee98d17bc
   constructor(x, y) {
     this.x = x;
     this.y = y;
