@@ -1,6 +1,6 @@
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
-let mapSize = 20; // n x n size of the tilemap
+let mapSize = 10; // n x n size of the tilemap
 let tilemap = []; // contains each tile Object: outer array is Y inner arrays are Xs; tilemap[y][x]
 let textures = [];
 let textureMap = []; // same as tilemap but this determines which tile graphic is shown
@@ -46,6 +46,7 @@ function preload() {
 
 function setup() {
   createCanvas(550, 550);
+
   GenerateTextureMap();
   GenerateTileMap();
   // console.log(tilemap);
@@ -60,6 +61,7 @@ function setup() {
     textureMap
   );
 
+  //generate each type of collectibles using a parameter
   for (let i = 0; i < emeraldsNum; i++) {
     spawnCollectible("E");
   }
@@ -95,7 +97,7 @@ function DisplayGraphics() {
       tilemap[across][down].debug(debugFLIP);
     }
   }
-  // Display and check collision for each emerald
+  // Display and check collision for each collectible
   for (let i = 0; i < collectibles.length; i++) {
     collectibles[i].display();
     collectibles[i].checkCollision(player);
@@ -167,13 +169,22 @@ function keyPressed() {
 
 function spawnCollectible(type) {
   let across, down, collectibleExists;
+
   do {
+    //this code will keep running until it finds the correct coordinates
     across = floor(random(0, mapSize));
     down = floor(random(0, mapSize));
-    const filtered = collectibles.filter((c) => {
-      if (c.across == across && c.down == down) return true;
-    });
+
+    //we filter through all collectibles to find any that are on the same coordinates as the ones generated
+    const filtered = collectibles.filter(
+      (c) => c.across == across && c.down == down
+    );
+
+    //if there is a collectible in those coordinates, that array will have one index
     collectibleExists = filtered.length > 0;
-  } while (textureMap[down][across] === 1 || collectibleExists); // Check if the position overlaps with a crystal tile
+
+    // Check if the position overlaps with a crystal tile and if there is a collectible in the generated coordinates
+  } while (textureMap[down][across] === 1 || collectibleExists);
+
   collectibles.push(new Collectible(type, across, down, tileSize));
 }
