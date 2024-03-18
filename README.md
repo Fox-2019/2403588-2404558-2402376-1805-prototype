@@ -55,8 +55,7 @@ I chose specific items to create for powerups such as emeralds relating back to 
 
 
 # Concept Art
-![concept](concept art.png)
-
+![concept](conceptart.png)
 # Author
 
 Jessica Fox
