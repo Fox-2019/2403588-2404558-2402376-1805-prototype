@@ -80,7 +80,7 @@ function draw() {
   background(50);
   DisplayGraphics();
   player.move();
-  dragon.move(); // Move the dragon
+  dragon.move(player); // Move the dragon towards the player
   camera.move();
   textAlign(RIGHT);
   textSize(20);
@@ -170,7 +170,7 @@ class Dragon {
     this.textureMap = textureMap;
   }
 
-  move() {
+  move(player) {
     // Calculate direction towards the player
     let dx = player.x - this.x;
     let dy = player.y - this.y;
@@ -192,3 +192,4 @@ function gameOver() {
   text("Game Over", width / 2, height / 2);
   noLoop(); // Stop the game loop
 }
+
