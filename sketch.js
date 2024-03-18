@@ -61,19 +61,27 @@ function preload() {
 }
 
 function setup() {
-  createCanvas(550, 550);
-  GenerateTextureMap();
-  GenerateTileMap();
-  camera = new Camera();
-  player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
+  try {
+    createCanvas(550, 550);
+    GenerateTextureMap();
+    GenerateTileMap();
+    camera = new Camera();
+    player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
 
-  // Initialize Emerald objects array with random positions
-  for (let i = 0; i < 4; i++) { // Initially spawn 4 emeralds
-    spawnEmerald();
+    // Initialize Emerald objects array with random positions
+    for (let i = 0; i < 4; i++) { // Initially spawn 4 emeralds
+      spawnEmerald();
+    }
+
+    // Initialize the dragon
+    dragon = new Dragon(dragonImage, floor(random(0, 10)), floor(random(0, 10)), playerSize, dragonSpeed, textureMap);
+  } catch (error) {
+    console.error(error);
+    textSize(24);
+    fill(255);
+    text("Error occurred during setup. Check console for details.", width / 2, height / 2);
+    noLoop(); // Stop the game loop
   }
-
-  // Initialize the dragon
-  dragon = new Dragon(dragonImage, floor(random(0, 10)), floor(random(0, 10)), playerSize, dragonSpeed, textureMap);
 }
 
 function draw() {
@@ -192,4 +200,3 @@ function gameOver() {
   text("Game Over", width / 2, height / 2);
   noLoop(); // Stop the game loop
 }
-
