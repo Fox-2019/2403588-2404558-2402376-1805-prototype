@@ -88,13 +88,6 @@ class Player {
     image(this.sprites, this.x, this.y, this.tileSize, this.tileSize);
   }
 
-      //Player Interactipn with collectible.
-  intersects(collectible) {
-      let d = dist(this.x, this.y, collectible.x, collectible.y);
-
-      return d < this.size / 2 + collectible.size / 2;
-  }
-
   debug(isON) {
     if (isON) {
       stroke(245);

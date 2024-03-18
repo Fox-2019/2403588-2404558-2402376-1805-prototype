@@ -1,5 +1,5 @@
 //TILEMAPS
-let tileSize = 50; //pixel size of tiles
+let tileSize = 20; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
 let tilemap = []; // contains each tile Object: outer array is Y inner arrays are Xs; tilemap[y][x]
 let textures = [];
@@ -16,14 +16,21 @@ let camera;
 
 let debugFLIP = false; //true turns on all debug functions
 
-//Point system variables
+
+//ishma & jasveen
+//Collectibles system variables
 let points = 0
+let pickUpsArr = []; //array of collectibles
+let collectNum = 5; //number of collectibles at any time
+let collectibeSprite;
+
 
 function preload() {
   textures[0] = loadImage("leafy.png");
   textures[1] = loadImage("crystal.png");
-  collectibeSprite = loadImage("coin.jpg");
   playerSprite = loadImage("fairy.png");
+  collectibleSprite = loadImage("coin.jpg");
+
   //for when we have original textures for the character
   // playerSprite = {
   //   up: loadImage("imgs/librarian-u.png"),
@@ -43,6 +50,9 @@ function setup() {
   //uses the generated texture map to create a 'tile map' and create the objects for each tile
   GenerateTileMap();
   // console.log(tilemap);
+
+  //ISHMA create collectibles
+  generateCollectibles(collectNum);
 
   camera = new Camera();
   player = new Player(
@@ -67,21 +77,6 @@ textSize(20);
 fill(255);
 text("points:"+points,width-50,30);
 
-//ishma
-let collectible;
-let collectibles = [];
-let collectNum = 5; //number of collectibles at any time
-
-
-//create and display collectibles
-for (let i=0; i<=collectNum; i++) {
-  collectibles[i].display();
-  if (player.intersects(collectible)) {
-    collectibles[i].pickup(); // Remove collectible if player intersects with it
-  }
-}
-
-
 } //END OF DRAW
 
 
@@ -98,6 +93,12 @@ function DisplayGraphics() {
       tilemap[across][down].debug(debugFLIP);
     }
   }
+
+  for (let i=0; i<=collectNum; i++) {
+    pickUpsArr[i].display();
+    // pickUpsArr[i].intersects();
+  }
+  
 
   player.display();
   player.debug(debugFLIP);
@@ -151,18 +152,27 @@ function keyPressed() {
 
 function generateCollectibles(num) {
   for (let i = 0; i < num; i++) {
-    let x = random(width);
-    let y = random(height);
-    collectibles.push(new Collectible(x, y));
+    let across = random(mapSize);
+    let down = random(mapSize);
+    let x = across * tileSize;
+    let y = down * tileSize;
+    pickUpsArr.push(new Collectible(x, y));
   }
 }
 
-//Collectibles
 class Collectible {
   constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.size = 1;
+    this.size = tileSize;
+    this.collected = false;
+  }
+
+  //Player Interactipn with collectible.
+  intersects() {
+    let d = dist(player.x, player.y, this.x,this.y);
+
+    return d < player.size / 2 + this.size / 2;
   }
 
   display() {
@@ -172,8 +182,7 @@ class Collectible {
   }
 
   pickup() {
-    this.collected = true; 
-    // Increase score or perform other actions
+    this.collected = true;
   }
 }
 
