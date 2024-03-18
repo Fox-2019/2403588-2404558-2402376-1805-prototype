@@ -10,16 +10,14 @@ class Dragon {
   }
 
   move(target) {
-    let targetX = target.x;
-    let targetY = target.y;
-
+    //if the slowdown is set to 0
     if (this.slowdownMultiplier < 1) {
-      this.slowdownMultiplier += 0.005;
+      this.slowdownMultiplier += 0.002;
     }
 
     // Calculate direction towards the target
-    let dx = targetX - this.x;
-    let dy = targetY - this.y;
+    let dx = target.x - this.x;
+    let dy = target.y - this.y;
 
     // Move towards the target
     if (dx !== 0 || dy !== 0) {
@@ -45,10 +43,11 @@ class Dragon {
 
   debug(isON) {
     if (isON) {
-      // console.log(this.speed);
+      push();
       stroke(0);
       fill(0, 0, 0, 100);
       rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
+      pop();
     }
   }
 }
