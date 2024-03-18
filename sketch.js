@@ -47,8 +47,9 @@ function preload() {
 
 function setup() {
   createCanvas(550, 550);
+  angleMode(DEGREES);
   frameRate(fps);
-  try {
+
     GenerateTextureMap();
     GenerateTileMap();
     // console.log(tilemap);
@@ -156,10 +157,10 @@ function displayPointsText() {
   fill(50, 50, 50, 200);
   //since this function is ran in displayGraphics both the box and the text need the camera tranlation; probably couldve pulled it out to not have to deal with the offsets
   rect(
-    width - camera.Xtranslate + camera.Xoffset - 190,
-    -camera.Ytranslate + camera.Yoffset - 25,
+    width - camera.Xtranslate + camera.Xoffset - 200,
+    -camera.Ytranslate + camera.Yoffset - 15,
     width,
-    40
+    30
   );
   stroke(50);
   strokeWeight(10);
@@ -167,7 +168,7 @@ function displayPointsText() {
   text(
     "points:" + points,
     width - camera.Xtranslate + camera.Xoffset - 85,
-    -camera.Ytranslate + camera.Yoffset - 20
+    -camera.Ytranslate + camera.Yoffset + 5
   );
   pop();
 }
