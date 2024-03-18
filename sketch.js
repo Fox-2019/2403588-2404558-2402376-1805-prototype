@@ -61,27 +61,20 @@ function preload() {
 }
 
 function setup() {
-  console.log("Setup function is executing...");
   createCanvas(550, 550);
-  console.log("Canvas created.");
   try {
     GenerateTextureMap();
     GenerateTileMap();
-    console.log("Texture map and tile map generated.");
     camera = new Camera();
-    console.log("Camera initialized.");
     player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
-    console.log("Player initialized.");
 
     // Initialize Emerald objects array with random positions
     for (let i = 0; i < 4; i++) { // Initially spawn 4 emeralds
       spawnEmerald();
     }
-    console.log("Emeralds spawned.");
 
     // Initialize the dragon
     dragon = new Dragon(dragonImage, floor(random(0, 10)), floor(random(0, 10)), playerSize, dragonSpeed, textureMap);
-    console.log("Dragon initialized.");
   } catch (error) {
     console.error(error);
     textSize(24);
@@ -92,7 +85,6 @@ function setup() {
 }
 
 function draw() {
-  console.log("Draw function is executing...");
   background(50);
   DisplayGraphics();
   player.move();
@@ -208,5 +200,6 @@ function gameOver() {
   text("Game Over", width / 2, height / 2);
   noLoop(); // Stop the game loop
 }
+
 
 
