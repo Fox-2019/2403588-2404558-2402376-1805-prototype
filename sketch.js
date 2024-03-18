@@ -15,7 +15,7 @@ class Emerald {
   }
 
   checkCollision(player) {
-    if (!this.isCollected && dist(player.x, player.y, this.x, this.y) < tileSize / 2) {
+    if (!this.isCollected && dist(player.x, player.y, this.x * tileSize, this.y * tileSize) < tileSize / 2) {
       this.isCollected = true;
       increasePoints(2);
     }
@@ -117,4 +117,5 @@ function keyPressed() {
   camera.SetCamDir();
   player.setDirection();
 }
+
 
