@@ -10,12 +10,22 @@ class Emerald {
 
   display() {
     if (!this.isCollected) {
-      image(this.image, this.x * tileSize, this.y * tileSize, this.size, this.size);
+      image(
+        this.image,
+        this.x * tileSize,
+        this.y * tileSize,
+        this.size,
+        this.size
+      );
     }
   }
 
   checkCollision(player) {
-    if (!this.isCollected && dist(player.x, player.y, this.x * tileSize, this.y * tileSize) < tileSize / 2) {
+    if (
+      !this.isCollected &&
+      dist(player.x, player.y, this.x * tileSize, this.y * tileSize) <
+        tileSize / 2
+    ) {
       this.isCollected = true;
       increasePoints(2);
       respawnEmeralds();
@@ -66,10 +76,18 @@ function setup() {
     GenerateTextureMap();
     GenerateTileMap();
     camera = new Camera();
-    player = new Player(playerSprite, floor(random(0, 10)), floor(random(0, 10)), playerSize, playerSpeed, textureMap);
+    player = new Player(
+      playerSprite,
+      floor(random(0, 10)),
+      floor(random(0, 10)),
+      playerSize,
+      playerSpeed,
+      textureMap
+    );
 
     // Initialize Emerald objects array with random positions
-    for (let i = 0; i < 4; i++) { // Initially spawn 4 emeralds
+    for (let i = 0; i < 4; i++) {
+      // Initially spawn 4 emeralds
       spawnEmerald();
     }
 
@@ -79,12 +97,23 @@ function setup() {
       dragonX = floor(random(0, mapSize));
       dragonY = floor(random(0, mapSize));
     } while (textureMap[dragonY][dragonX] === 1); // Ensure dragon doesn't spawn on crystal tile
-    dragon = new Dragon(dragonImage, dragonX, dragonY, playerSize, dragonSpeed, textureMap);
+    dragon = new Dragon(
+      dragonImage,
+      dragonX,
+      dragonY,
+      playerSize,
+      dragonSpeed,
+      textureMap
+    );
   } catch (error) {
     console.error(error);
     textSize(24);
     fill(255);
-    text("Error occurred during setup. Check console for details.", width / 2, height / 2);
+    text(
+      "Error occurred during setup. Check console for details.",
+      width / 2,
+      height / 2
+    );
     noLoop(); // Stop the game loop
   }
 }
@@ -95,20 +124,19 @@ function draw() {
   player.move();
   dragon.move(player); // Move the dragon towards the player
   camera.move();
+
   textAlign(RIGHT);
   textSize(20);
   fill(255);
   text("points:" + points, width - 50, 30);
+} //END OF DRAW
 
-  // Display and check collision for each emerald
-  for (let i = 0; i < emeralds.length; i++) {
-    emeralds[i].display();
-    emeralds[i].checkCollision(player);
-  }
-}
-
+//AB uses the translation variables to offset the world so it appears as if a virtual camera is being used, also runs the display class function for all tiles
 function DisplayGraphics() {
-  translate(camera.Xtranslate + camera.Xoffset, camera.Ytranslate + camera.Yoffset);
+  translate(
+    camera.Xtranslate + camera.Xoffset,
+    camera.Ytranslate + camera.Yoffset
+  );
   for (let across = 0; across < mapSize; across++) {
     for (let down = 0; down < mapSize; down++) {
       tilemap[across][down].display();
@@ -136,7 +164,13 @@ function GenerateTileMap() {
   for (let across = 0; across < mapSize; across++) {
     tilemap[across] = [];
     for (let down = 0; down < mapSize; down++) {
-      tilemap[across][down] = new Tile(textureMap[down][across], across, down, tileSize, id);
+      tilemap[across][down] = new Tile(
+        textureMap[down][across],
+        across,
+        down,
+        tileSize,
+        id
+      );
       id++;
     }
   }
@@ -195,7 +229,7 @@ class Dragon {
           { x: nextTileX + 1, y: nextTileY }, // Right
           { x: nextTileX - 1, y: nextTileY }, // Left
           { x: nextTileX, y: nextTileY + 1 }, // Down
-          { x: nextTileX, y: nextTileY - 1 }  // Up
+          { x: nextTileX, y: nextTileY - 1 }, // Up
         ];
 
         for (let alt of alternatives) {
@@ -216,8 +250,3 @@ class Dragon {
     image(this.image, this.x, this.y, this.size, this.size);
   }
 }
-
-
-
-
-
