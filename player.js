@@ -14,16 +14,9 @@ class Player {
     this.isMoving = false;
     this.tX = this.x;
     this.tY = this.y;
-  }
-    //Player Interactipn with collectible.
-    intersects(collectible) {
-        let d = dist(this.x, this.y, collectible.x, collectible.y);
-        return d < this.size / 2 + collectible.size / 2;
-}
-  
-  }
+  };
 
-  setDirection(); {
+  setDirection() {
     if (!this.isMoving) {
       if (key === "w") {
         this.dirX = 0;
@@ -53,7 +46,7 @@ class Player {
     }
   }
 
-  checkTargetTile(); {
+  checkTargetTile() {
     this.across = floor(this.x / this.tileSize);
     this.down = floor(this.y / this.tileSize);
 
@@ -78,7 +71,7 @@ class Player {
     }
   }
 
-  move(); {
+  move() {
     if (this.isMoving) {
       this.x += this.speed * this.dirX;
       this.y += this.speed * this.dirY;
@@ -91,11 +84,18 @@ class Player {
     }
   }
 
-  display(); {
+  display() {
     image(this.sprites, this.x, this.y, this.tileSize, this.tileSize);
   }
 
-  debug(isON); {
+      //Player Interactipn with collectible.
+  intersects(collectible) {
+      let d = dist(this.x, this.y, collectible.x, collectible.y);
+
+      return d < this.size / 2 + collectible.size / 2;
+  }
+
+  debug(isON) {
     if (isON) {
       stroke(245);
       noFill();
@@ -103,4 +103,5 @@ class Player {
     }
   }
 
+}
 

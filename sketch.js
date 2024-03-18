@@ -67,10 +67,17 @@ textSize(20);
 fill(255);
 text("points:"+points,width-50,30);
 
-for (let collectible of collectibles) {
-  collectible.display();
+//ishma
+let collectible;
+let collectibles = [];
+let collectNum = 5; //number of collectibles at any time
+
+
+//create and display collectibles
+for (let i=0; i<=collectNum; i++) {
+  collectibles[i].display();
   if (player.intersects(collectible)) {
-    collectible.pickup(); // Remove collectible if player intersects with it
+    collectibles[i].pickup(); // Remove collectible if player intersects with it
   }
 }
 
@@ -151,7 +158,6 @@ function generateCollectibles(num) {
 }
 
 //Collectibles
-
 class Collectible {
   constructor(x, y) {
     this.x = x;
