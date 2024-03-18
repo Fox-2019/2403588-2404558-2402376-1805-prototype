@@ -57,7 +57,7 @@ function preload() {
   textures[1] = loadImage("crystal.png");
   playerSprite = loadImage("fairy.png");
   emeraldImage = loadImage("emerald.png"); // Load emerald image
-  dragonImage = loadImage("dragon.png"); // Load dragon image
+  dragonImage = loadImage("dragon .png"); // Load dragon image
 }
 
 function setup() {
@@ -208,4 +208,5 @@ function gameOver() {
   text("Game Over", width / 2, height / 2);
   noLoop(); // Stop the game loop
 }
+
 
