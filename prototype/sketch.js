@@ -6,7 +6,6 @@ let textureMap = []; // same as tilemap but this determines which tile graphic i
 
 //PLAYER
 let player;
-// let playerSprite = {};
 let playerSprite;
 let playerSpeed = 5;
 let playerSize = tileSize;
@@ -179,4 +178,5 @@ class Player {
     this.textureMap[y][x] = 1;
   }
 }
+
 
