@@ -57,7 +57,7 @@ function preload() {
   textures[1] = loadImage("crystal.png");
   playerSprite = loadImage("fairy.png");
   emeraldImage = loadImage("emerald.png"); // Load emerald image
-  dragonImage = loadImage("dragon.png"); // Load dragon image
+  dragonImage = loadImage("dragon .png"); // Load dragon image
 }
 
 function setup() {
@@ -216,6 +216,7 @@ class Dragon {
     image(this.image, this.x, this.y, this.size, this.size);
   }
 }
+
 
 
 
