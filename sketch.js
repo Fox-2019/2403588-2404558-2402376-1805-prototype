@@ -321,5 +321,12 @@ function enemyIndicator() {
   rect(0, 0, 30, 30);
   fill(0);
   circle(0, 0, 10);
+
+  //if dragon is frozen, reflect that in the indicator
+  let alpha = map(dragon.freezeMultiplier, 0, 1, 240, 0);
+  stroke(80, 80, 250, alpha);
+  fill(120, 120, 250, alpha);
+  rect(0, 0, 30, 30);
+
   pop();
 }
