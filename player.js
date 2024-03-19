@@ -19,25 +19,25 @@ class Player {
 
   setDirection() {
     if (!this.isMoving && !gameOver) {
-      if (key === "w") {
+      if (key === "w" || keyCode == UP_ARROW) {
         this.dirX = 0;
         this.dirY = -1;
         // this.currentSprite = this.sprites.up;
       }
 
-      if (key === "s") {
+      if (key === "s" || keyCode == DOWN_ARROW) {
         this.dirX = 0;
         this.dirY = 1;
         // this.currentSprite = this.sprites.down;
       }
 
-      if (key === "a") {
+      if (key === "a" || keyCode == LEFT_ARROW) {
         this.dirX = -1;
         this.dirY = 0;
         this.currentSprite = this.sprites.left;
       }
 
-      if (key === "d") {
+      if (key === "d" || keyCode == RIGHT_ARROW) {
         this.dirX = 1;
         this.dirY = 0;
         this.currentSprite = this.sprites.right;
