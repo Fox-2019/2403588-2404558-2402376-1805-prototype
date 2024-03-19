@@ -2,6 +2,12 @@ let debugFLIP = false; //true turns on all debug functions
 let camera;
 let fps = 60;
 
+//BLACKSCREEN/GAMEOVER
+let cnv;
+let animCircleSize = 0;
+let gameStart = true;
+let gameOver = false;
+
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
@@ -13,7 +19,7 @@ let textureMap = []; // same as tilemap but this determines which tile graphic i
 let player;
 let playerSprite = {};
 // let playerSprite;
-let playerSpeed = 10;
+let playerSpeed = 25;
 let playerSize = tileSize;
 
 //COLLECTIBLES; jasveen, adam, ishma
@@ -26,7 +32,7 @@ let collectibleSprites = [];
 
 //DRAGON; jasveen, jess
 let dragon;
-let dragonImage;
+let dragonImage = [];
 let dragonSpeed = 0.5; // Initial speed of the dragon
 
 function preload() {
@@ -42,11 +48,15 @@ function preload() {
   collectibleSprites[1] = loadImage("JESS ASSETS/potion.png");
   collectibleSprites[2] = loadImage("JESS ASSETS/star.png");
 
-  dragonImage = loadImage("JESS ASSETS/dragon.png");
+  dragonImage = {
+    dragon: loadImage("JESS ASSETS/dragon.png"),
+    pinky: loadImage("JESS ASSETS/pinky.png"),
+  };
 }
 
 function setup() {
   createCanvas(550, 550);
+  cnv = createGraphics(width * 6, height * 6);
   angleMode(DEGREES);
   frameRate(fps);
 
@@ -54,15 +64,25 @@ function setup() {
   GenerateTileMap();
   // console.log(tilemap);
 
-  camera = new Camera();
+  //randomly assign a walkable tile for the player to spawn on
+  let randX, randY;
+  do {
+    randX = floor(random(0, mapSize));
+    randY = floor(random(0, mapSize));
+  } while (textureMap[randY][randX] === 1);
+
   player = new Player(
     playerSprite,
-    floor(random(0, 10)),
-    floor(random(0, 10)),
+    randX,
+    randY,
     playerSize,
     playerSpeed,
     textureMap
   );
+
+  //initialize the camera and move it if the player isnt on-screen
+  camera = new Camera();
+  camera.moveIfOffscreen();
 
   //initial generation of each type of collectibles using a parameter
   for (let i = 0; i < emeraldsNum; i++) {
@@ -107,12 +127,87 @@ function setup() {
 
 function draw() {
   background(50);
-  push();
 
   DisplayGraphics();
   player.move();
   dragon.move(player); // Move the dragon towards the player
   camera.move();
+
+  gameStateAnim();
+} // END OF DRAW
+
+function gameStateAnim() {
+  push();
+  rectMode(CENTER);
+  imageMode(CENTER);
+  textAlign(CENTER);
+  textAlign(CENTER);
+  cnv.background(0);
+  cnv.fill(0);
+
+  if (gameStart) {
+    cnv.erase();
+
+    animCircleSize += 0.4;
+    if (animCircleSize > 20) {
+      animCircleSize += 1;
+    }
+    if (animCircleSize > 50) {
+      animCircleSize += 1;
+    }
+    if (animCircleSize > 100) {
+      animCircleSize += animCircleSize - 100;
+    }
+    if (animCircleSize > 4000) {
+      animCircleSize = 2000;
+      gameStart = false;
+      // gameOver = true;
+    }
+  }
+  //we create a circle on the second canvas and increase its size with "time", using it with the erase() function creates a hole in the canvas through which we can see the initial canvas ie: the game
+  cnv.circle(cnv.width / 2, cnv.height / 2, animCircleSize);
+
+  if (gameOver) {
+    animCircleSize -= 20;
+
+    if (animCircleSize < 0) {
+      //when the animation is finished, we make sure the circle cannot grow uncontrollably as well as turning off the erase function
+      cnv.noErase();
+      animCircleSize = 0;
+      cnv.background(0);
+      gameOver = false;
+    }
+  }
+
+  // console.log(animCircleSize);
+
+  //any additional canvas has to be applied to the initial canvas with a image funtion
+  image(cnv, player.x + camera.Xoffset, player.y + camera.Yoffset);
+
+  //if the player has lost and the circle animation has finished, create the game over text and allow for easy restart
+  if (!gameOver && animCircleSize == 0) {
+    fill(255);
+    textSize(50);
+    text(
+      "GAME OVER",
+      width / 2 - 20 - camera.Xtranslate,
+      height / 2 - 10 - camera.Ytranslate
+    );
+    textSize(20);
+    text(
+      "Score: " + points,
+      width / 2 - 20 - camera.Xtranslate,
+      height / 2 + 15 - camera.Ytranslate
+    );
+    textSize(15);
+    text(
+      "Press R to reload",
+      width / 2 - 20 - camera.Xtranslate,
+      height - 50 - camera.Ytranslate
+    );
+    if (keyIsDown(82)) location.reload();
+  }
+  pop();
 }
 
 function DisplayGraphics() {
@@ -242,14 +337,14 @@ function increaseEnemySpeed(itemType) {
   //depending on what type of item the player picks up, a different speed is applied
   switch (itemType) {
     case "E":
-      dragon.speed += points / 5000; //least speed added
+      dragon.speed += points / 6000; //least speed added
       break;
     case "P":
-      dragon.speed += points / 2000; //medium speed but freeze effect
+      dragon.speed += points / 4000; //medium speed but freeze effect
       dragon.dragonFreeze();
       break;
     case "S":
-      dragon.speed += points / 1000; //most speed added
+      dragon.speed += points / 2000; //most speed added
       break;
   }
 }
@@ -308,5 +403,12 @@ function enemyIndicator() {
   rect(0, 0, 30, 30);
   fill(0);
   circle(0, 0, 10);
+
+  //if dragon is frozen, reflect that in the indicator
+  let alpha = map(dragon.freezeMultiplier, 0, 1, 240, 0);
+  stroke(80, 80, 250, alpha);
+  fill(120, 120, 250, alpha);
+  rect(0, 0, 30, 30);
+
   pop();
 }

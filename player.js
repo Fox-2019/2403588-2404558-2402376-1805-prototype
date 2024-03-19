@@ -6,7 +6,7 @@ class Player {
     this.down = startDown;
     this.x = this.across * size;
     this.y = this.down * size;
-    this.tileSize = size;
+    this.size = size;
     this.speed = speed;
     this.tileRules = tileRules;
     this.dirX = 0;
@@ -14,29 +14,30 @@ class Player {
     this.isMoving = false;
     this.tX = this.x;
     this.tY = this.y;
+    this.health = 100;
   }
 
   setDirection() {
-    if (!this.isMoving) {
-      if (key === "w") {
+    if (!this.isMoving && !gameOver) {
+      if (key === "w" || keyCode == UP_ARROW) {
         this.dirX = 0;
         this.dirY = -1;
         // this.currentSprite = this.sprites.up;
       }
 
-      if (key === "s") {
+      if (key === "s" || keyCode == DOWN_ARROW) {
         this.dirX = 0;
         this.dirY = 1;
         // this.currentSprite = this.sprites.down;
       }
 
-      if (key === "a") {
+      if (key === "a" || keyCode == LEFT_ARROW) {
         this.dirX = -1;
         this.dirY = 0;
         this.currentSprite = this.sprites.left;
       }
 
-      if (key === "d") {
+      if (key === "d" || keyCode == RIGHT_ARROW) {
         this.dirX = 1;
         this.dirY = 0;
         this.currentSprite = this.sprites.right;
@@ -47,8 +48,8 @@ class Player {
   }
 
   checkTargetTile() {
-    this.across = floor(this.x / this.tileSize);
-    this.down = floor(this.y / this.tileSize);
+    this.across = floor(this.x / this.size);
+    this.down = floor(this.y / this.size);
 
     let nextTileHorizontal = this.across + this.dirX;
     let nextTileVertical = this.down + this.dirY;
@@ -62,8 +63,8 @@ class Player {
     ) {
       //if it is, check if targetTile walkable
       if (this.tileRules[nextTileVertical][nextTileHorizontal] != 1) {
-        this.tX = nextTileHorizontal * this.tileSize;
-        this.tY = nextTileVertical * this.tileSize;
+        this.tX = nextTileHorizontal * this.size;
+        this.tY = nextTileVertical * this.size;
 
         //camera move is ran before the player movement so by the time the player stops moving the camera will have moved aswell
         camera.moveIfOffscreen();
@@ -85,8 +86,28 @@ class Player {
     }
   }
 
+  damage(amount) {
+    this.health -= amount;
+
+    if (this.health <= 0) {
+      gameOver = true;
+      this.health = 0;
+    }
+  }
+
   display() {
-    image(this.currentSprite, this.x, this.y, this.tileSize, this.tileSize);
+    push();
+    image(this.currentSprite, this.x, this.y, this.size, this.size);
+    fill(70, 220, 235);
+    stroke(0, 50, 150);
+    strokeWeight(2);
+    rect(
+      this.x,
+      this.y + this.size,
+      map(this.health, 0, 100, 0, this.size),
+      10
+    );
+    pop();
   }
 
   debug(isON) {
@@ -94,7 +115,7 @@ class Player {
       push();
       stroke(245);
       fill(255, 255, 255, 100);
-      rect(this.x + 2, this.y + 2, this.tileSize - 4, this.tileSize - 4);
+      rect(this.x + 2, this.y + 2, this.size - 4, this.size - 4);
       pop();
     }
   }

@@ -19,10 +19,10 @@ class Collectible {
       this.points = 2;
       this.sprite = collectibleSprites[0];
     } else if (this.type == "P") {
-      this.points = 5;
+      this.points = -1;
       this.sprite = collectibleSprites[1];
     } else if (this.type == "S") {
-      this.points = 10;
+      this.points = 5;
       this.sprite = collectibleSprites[2];
     }
   }
@@ -33,7 +33,8 @@ class Collectible {
       //...filter the item array and return only the ones that arent the current one (ie remove current)
       collectibles = collectibles.filter((c) => c != this);
 
-      increasePoints(this.points);
+      //only increase points if the player is still alive
+      if (!gameOver) increasePoints(this.points);
 
       //spawns a collectible of the same type
       spawnCollectible(this.type);
