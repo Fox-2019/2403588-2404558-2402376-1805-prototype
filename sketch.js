@@ -13,7 +13,7 @@ let textureMap = []; // same as tilemap but this determines which tile graphic i
 let player;
 let playerSprite = {};
 // let playerSprite;
-let playerSpeed = 10;
+let playerSpeed = 25;
 let playerSize = tileSize;
 
 //COLLECTIBLES; jasveen, adam, ishma
@@ -26,7 +26,7 @@ let collectibleSprites = [];
 
 //DRAGON; jasveen, jess
 let dragon;
-let dragonImage;
+let dragonImage = [];
 let dragonSpeed = 0.5; // Initial speed of the dragon
 
 function preload() {
@@ -42,7 +42,10 @@ function preload() {
   collectibleSprites[1] = loadImage("JESS ASSETS/potion.png");
   collectibleSprites[2] = loadImage("JESS ASSETS/star.png");
 
-  dragonImage = loadImage("JESS ASSETS/dragon.png");
+  dragonImage = {
+    dragon: loadImage("JESS ASSETS/dragon.png"),
+    pinky: loadImage("JESS ASSETS/pinky.png"),
+  };
 }
 
 function setup() {
@@ -54,15 +57,25 @@ function setup() {
   GenerateTileMap();
   // console.log(tilemap);
 
-  camera = new Camera();
+  //randomly assign a walkable tile for the player to spawn on
+  let randX, randY;
+  do {
+    randX = floor(random(0, mapSize));
+    randY = floor(random(0, mapSize));
+  } while (textureMap[randY][randX] === 1);
+
   player = new Player(
     playerSprite,
-    floor(random(0, 10)),
-    floor(random(0, 10)),
+    randX,
+    randY,
     playerSize,
     playerSpeed,
     textureMap
   );
+
+  //initialize the camera and move it if the player isnt on-screen
+  camera = new Camera();
+  camera.moveIfOffscreen();
 
   //initial generation of each type of collectibles using a parameter
   for (let i = 0; i < emeraldsNum; i++) {
@@ -242,14 +255,14 @@ function increaseEnemySpeed(itemType) {
   //depending on what type of item the player picks up, a different speed is applied
   switch (itemType) {
     case "E":
-      dragon.speed += points / 5000; //least speed added
+      dragon.speed += points / 6000; //least speed added
       break;
     case "P":
-      dragon.speed += points / 2000; //medium speed but freeze effect
+      dragon.speed += points / 4000; //medium speed but freeze effect
       dragon.dragonFreeze();
       break;
     case "S":
-      dragon.speed += points / 1000; //most speed added
+      dragon.speed += points / 2000; //most speed added
       break;
   }
 }
