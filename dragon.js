@@ -43,7 +43,13 @@ class Dragon {
   }
 
   display() {
-    image(this.image, this.x, this.y, this.size, this.size);
+    push();
+    tint(255, map(this.freezeMultiplier, 0, 1, 100, 255));
+    image(this.image.dragon, this.x, this.y, this.size, this.size);
+
+    tint(255, map(this.freezeMultiplier, 0, 1, 255, 0));
+    image(this.image.pinky, this.x, this.y, this.size, this.size);
+    pop();
   }
 
   debug(isON) {
