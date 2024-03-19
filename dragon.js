@@ -1,18 +1,19 @@
 class Dragon {
   constructor(image, x, y, size, speed, textureMap) {
     this.image = image;
-    this.x = x * tileSize;
-    this.y = y * tileSize;
+    this.x = x * size;
+    this.y = y * size;
     this.size = size;
     this.speed = speed;
-    this.slowdownMultiplier = 0;
+    this.freezeMultiplier = 0;
+    this.damage = 1.1;
     this.textureMap = textureMap;
   }
 
   move(target) {
-    //if the slowdown is set to 0
-    if (this.slowdownMultiplier < 1) {
-      this.slowdownMultiplier += 0.002;
+    //if the slowdown is set to 0, it means the dragon is frozen
+    if (this.freezeMultiplier < 1) {
+      this.freezeMultiplier += 0.002;
     }
 
     // Calculate direction towards the target
@@ -22,8 +23,8 @@ class Dragon {
     // Move towards the target
     if (dx !== 0 || dy !== 0) {
       let angle = atan2(dy, dx);
-      let newX = this.x + cos(angle) * this.speed * this.slowdownMultiplier;
-      let newY = this.y + sin(angle) * this.speed * this.slowdownMultiplier;
+      let newX = this.x + cos(angle) * this.speed * this.freezeMultiplier;
+      let newY = this.y + sin(angle) * this.speed * this.freezeMultiplier;
 
       // Check if the next position is a crystal tile
       let nextTileX = floor(newX / tileSize);
@@ -32,9 +33,13 @@ class Dragon {
       this.x = newX;
       this.y = newY;
     }
+    //if the the enemy moves into the target, deal damage taking in consideration the freeze effect
+    if (abs(dx) < this.size && abs(dy) < this.size)
+      player.damage(this.damage * this.freezeMultiplier);
   }
+
   dragonFreeze() {
-    this.slowdownMultiplier = 0;
+    this.freezeMultiplier = 0;
   }
 
   display() {
