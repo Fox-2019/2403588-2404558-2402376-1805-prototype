@@ -5,11 +5,11 @@ class Camera {
     this.Ytranslate = 0;
     this.Xoffset = 25; //initial camera translate offset
     this.Yoffset = 25;
-    this.DirX = 0;  //horizontal and vertical direction; X:-1 is left X:1 is right and so on
+    this.DirX = 0; //horizontal and vertical direction; X:-1 is left X:1 is right and so on
     this.DirY = 0;
-    this.TargetX = 0;  //the target offset for the camera to achieve
+    this.TargetX = 0; //the target offset for the camera to achieve
     this.TargetY = 0;
-    this.camSpeed = 25;
+    this.camSpeed = 50;
   }
   //use a function parameter to set the direction of the camera, passed in from moveIfOffscreen()
   SetCamDir(direction) {
@@ -48,7 +48,7 @@ class Camera {
     if (this.IsMoving) {
       this.Xtranslate += this.camSpeed * this.DirX;
       this.Ytranslate += this.camSpeed * this.DirY;
-      
+
       //if the camera reaches the desired target, zero out direction and tell code that camera isnt moving
       if (
         this.Xtranslate === this.TargetX &&
@@ -57,7 +57,7 @@ class Camera {
         this.IsMoving = false;
         this.DirX = 0;
         this.DirY = 0;
-        this.moveIfOffscreen();  //if the player moves to an adjacent chunk and before the camera finishes moving, moves to ANOTHER chunk the player wont be half-way offscreen
+        this.moveIfOffscreen(); //if the player moves to an adjacent chunk and before the camera finishes moving, moves to ANOTHER chunk the player wont be half-way offscreen
       }
     }
   }
