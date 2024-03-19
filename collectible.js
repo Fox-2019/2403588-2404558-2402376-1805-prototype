@@ -33,7 +33,8 @@ class Collectible {
       //...filter the item array and return only the ones that arent the current one (ie remove current)
       collectibles = collectibles.filter((c) => c != this);
 
-      increasePoints(this.points);
+      //only increase points if the player is still alive
+      if (!gameOver) increasePoints(this.points);
 
       //spawns a collectible of the same type
       spawnCollectible(this.type);

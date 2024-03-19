@@ -17,7 +17,7 @@ class Player {
   }
 
   setDirection() {
-    if (!this.isMoving) {
+    if (!this.isMoving && !gameOver) {
       if (key === "w") {
         this.dirX = 0;
         this.dirY = -1;

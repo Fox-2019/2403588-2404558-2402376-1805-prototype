@@ -2,6 +2,12 @@ let debugFLIP = false; //true turns on all debug functions
 let camera;
 let fps = 60;
 
+//BLACKSCREEN/GAMEOVER
+let cnv;
+let animCircleSize = 0;
+let gameStart = true;
+let gameOver = false;
+
 //TILEMAPS
 let tileSize = 50; //pixel size of tiles
 let mapSize = 30; // n x n size of the tilemap
@@ -50,6 +56,7 @@ function preload() {
 
 function setup() {
   createCanvas(550, 550);
+  cnv = createGraphics(width * 6, height * 6);
   angleMode(DEGREES);
   frameRate(fps);
 
@@ -120,12 +127,87 @@ function setup() {
 
 function draw() {
   background(50);
-  push();
 
   DisplayGraphics();
   player.move();
   dragon.move(player); // Move the dragon towards the player
   camera.move();
+
+  gameStateAnim();
+} // END OF DRAW
+
+function gameStateAnim() {
+  push();
+  rectMode(CENTER);
+  imageMode(CENTER);
+  textAlign(CENTER);
+  textAlign(CENTER);
+  cnv.background(0);
+  cnv.fill(0);
+
+  if (gameStart) {
+    cnv.erase();
+
+    animCircleSize += 0.4;
+    if (animCircleSize > 20) {
+      animCircleSize += 1;
+    }
+    if (animCircleSize > 50) {
+      animCircleSize += 1;
+    }
+    if (animCircleSize > 100) {
+      animCircleSize += animCircleSize - 100;
+    }
+    if (animCircleSize > 4000) {
+      animCircleSize = 2000;
+      gameStart = false;
+      // gameOver = true;
+    }
+  }
+  //we create a circle on the second canvas and increase its size with "time", using it with the erase() function creates a hole in the canvas through which we can see the initial canvas ie: the game
+  cnv.circle(cnv.width / 2, cnv.height / 2, animCircleSize);
+
+  if (gameOver) {
+    animCircleSize -= 20;
+
+    if (animCircleSize < 0) {
+      //when the animation is finished, we make sure the circle cannot grow uncontrollably as well as turning off the erase function
+      cnv.noErase();
+      animCircleSize = 0;
+      cnv.background(0);
+      gameOver = false;
+    }
+  }
+
+  // console.log(animCircleSize);
+
+  //any additional canvas has to be applied to the initial canvas with a image funtion
+  image(cnv, player.x + camera.Xoffset, player.y + camera.Yoffset);
+
+  //if the player has lost and the circle animation has finished, create the game over text and allow for easy restart
+  if (!gameOver && animCircleSize == 0) {
+    fill(255);
+    textSize(50);
+    text(
+      "GAME OVER",
+      width / 2 - 20 - camera.Xtranslate,
+      height / 2 - 10 - camera.Ytranslate
+    );
+    textSize(20);
+    text(
+      "Score: " + points,
+      width / 2 - 20 - camera.Xtranslate,
+      height / 2 + 15 - camera.Ytranslate
+    );
+    textSize(15);
+    text(
+      "Press R to reload",
+      width / 2 - 20 - camera.Xtranslate,
+      height - 50 - camera.Ytranslate
+    );
+    if (keyIsDown(82)) location.reload();
+  }
+  pop();
 }
 
 function DisplayGraphics() {
